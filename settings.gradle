@@ -1,0 +1,4 @@
+rootProject.name = "EverEconomy"
+include ':EverAPI'
+
+project(':EverAPI').projectDir = new File( '../EverAPI' )
