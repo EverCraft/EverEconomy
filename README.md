@@ -1,59 +1,23 @@
-# README #
+EverEconomy
+=============
 
-Ce projet contient les source du plugin EverEconomy.
+A minecraft plugin for Sponge platforms.
 
-### Installation Git ###
+## Links ##
+* [Source](https://github.com/EverCraft/EverEconomy)
+* [Wiki](http://wiki.evercraft.fr)
+* [Issues](https://github.com/EverCraft/EverEconomy/issues)
+* [Website](http://evercraft.fr)
+* [Support Me](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RUSKPBMNJG5R4)
 
-1. `git clone git@bitbucket.org:EverCraftFr/evereconomy.git`
-2. `mv evereconomy EverEconomy`
-3. `cd EverEconomy`
+## License ##
+This plugin is licensed under [GNU License](https://github.com/EverCraft/EverEconomy/blob/master/LICENSE).
 
-### Installation Gradle ###
+## Prerequisites ##
+* [Java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
-1. `gradle`
-2. `gradle --refresh-dependencies`
-3. `gradle install build`
-4. `gradle eclipse`
+## Clone ##
+The following steps will ensure your project is cloned properly
 
-### Installation Eclipse ###
-1. File > Import > Existing Projects into Workspace
-2. Select root directory : sélectionner le répertoire du dossier
-3. Finish
-4. Clique droit sur le nom du projet > Configure > Convert to Gradle
-5. Clique droit sur le nom du projet > Run As > Gradle Build...
-6. Ajouter dans Type tacks : install build
-7. Cliquer sur Apply 
-8. Cliquer sur Run
-
-### Mettre à jour les dépendances ###
-1. `gradle --refresh-dependencies`
-
-ou
-
-1. Clique droit sur le nom du projet > Gradle > Refresh All
-
-### Télécharger les derniers modifications ###
-1. `git pull origin master`
-
-ou
-
-1. Clique droit sur le nom du projet > Team > Synchronize Workspace
-2. Clique sur un élément > Pull 
-
-### Envoyer les derniers modifications ###
-1. `git add *`
-2. `git commit -m "<message>"`
-
-ou
-
-1. Clique droit sur le nom du projet > Team > Commit
-2. Mettre un message dans "Commit message"
-3. Sélectionner les fichiers
-4. Cliquer sur "Commit and push"
-
-### Compiler le plugin ###
-1. `gradle build`
-
-ou
-
-1. Clique droit sur le nom du projet > Run As > Gradle Build
+1. `git clone git@github.com:EverCraft/EverEconomy.git`
+2. `cd EverEconomy`
