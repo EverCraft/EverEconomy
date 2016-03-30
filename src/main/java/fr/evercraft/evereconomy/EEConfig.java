@@ -26,6 +26,11 @@ public class EEConfig extends EConfig {
 	public EEConfig(EverEconomy plugin) {
 		super(plugin);
 	}
+	
+	public void reload() {
+		super.reload();
+		this.plugin.getLogger().setDebug(this.isDebug());
+	}
 
 	public void loadDefault() {
 		addDefault("debug", false, "Displays plugin performance in the logs");
