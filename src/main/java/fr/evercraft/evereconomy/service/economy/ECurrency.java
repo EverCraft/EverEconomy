@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.sponge.UtilsChat;
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EverEconomy;
 
@@ -56,9 +56,9 @@ public class ECurrency implements Currency {
 		
 		this.format = this.plugin.getConfigs().getCurrencyFormat();
 		
-        this.singular = UtilsChat.of(this.plugin.getConfigs().getCurrencySingular());
-        this.plural = UtilsChat.of(this.plugin.getConfigs().getCurrencyPlural());
-        this.symbol = UtilsChat.of(this.plugin.getConfigs().getCurrencySymbol());
+        this.singular = EChat.of(this.plugin.getConfigs().getCurrencySingular());
+        this.plural = EChat.of(this.plugin.getConfigs().getCurrencyPlural());
+        this.symbol = EChat.of(this.plugin.getConfigs().getCurrencySymbol());
         
         this.numFractionDigits = this.plugin.getConfigs().getCurrencyNumFractionDigits();
         

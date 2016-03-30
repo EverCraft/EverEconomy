@@ -30,8 +30,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
-import fr.evercraft.everapi.sponge.UtilsChat;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EverEconomy;
 
@@ -46,7 +46,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return UtilsChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_DESCRIPTION")));
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -84,7 +84,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				resultat = executeBalance((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
-				source.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR_FOR_PLAYER")));
+				source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR_FOR_PLAYER")));
 			}
 			
 		// Si on connait le joueur
@@ -97,7 +97,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 					resultat = executeBalanceOthers(source, user.get());
 				// Le joueur est introuvable
 				} else {
-					source.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+					source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
 				}
 			// Il n'a pas la permission
 			} else {
@@ -141,7 +141,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				resultat = true;
 			// Le compte est introuvable
 			} else {
-				staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
 			}
 		// La source et le joueur sont identique
 		} else {

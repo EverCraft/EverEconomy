@@ -46,7 +46,7 @@ public class EEConfig extends EConfig {
 		addDefault("currency.plural", "&aEmeraudes");
 		addDefault("currency.symbol", "&aE");
 		addDefault("currency.format", "&6<amount> <currency>", "Usage : <amount>, <currency>, <symbol>");
-		addDefault("currency.balanceDefault", 300);
+		addDefault("currency.balanceStarting", 300);
 		addDefault("currency.balanceMin", 0);
 		addDefault("currency.balanceMax", 1000000);
 		addDefault("currency.numFractionDigits", 2);
@@ -75,7 +75,7 @@ public class EEConfig extends EConfig {
 	}
 	
 	public double getCurrencyBalanceDefault(){
-		return this.get("currency.balanceDefault").getDouble(0);
+		return this.get("currency.balanceStarting").getDouble(0);
 	}
 	
 	public int getCurrencyNumFractionDigits(){

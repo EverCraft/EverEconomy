@@ -38,8 +38,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.services.pagination.ESubCommand;
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
-import fr.evercraft.everapi.sponge.UtilsChat;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.commands.EEBalance;
 import fr.evercraft.evereconomy.commands.EEBalanceTop;
@@ -64,7 +64,7 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return UtilsChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("DESCRIPTION")));
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -183,7 +183,7 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 	
 	public Text descriptionGive(final CommandSource source) {
-		return UtilsChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_DESCRIPTION")));
 	}
 	
 	public Text helpGive(final CommandSource source) {
@@ -195,7 +195,7 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 	
 	public Text descriptionTake(final CommandSource source) {
-		return UtilsChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_DESCRIPTION")));
 	}
 	
 	public Text helpTake(final CommandSource source) {
@@ -207,7 +207,7 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 	
 	public Text descriptionReset(final CommandSource source) {
-		return UtilsChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("RESET_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("RESET_DESCRIPTION")));
 	}
 	
 	public Text helpReset(final CommandSource source) {
@@ -218,7 +218,7 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 	
 	public Text descriptionLog(final CommandSource source) {
-		return UtilsChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_DESCRIPTION")));
 	}
 	
 	public Text helpLog(final CommandSource source) {
@@ -267,7 +267,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = commandReset(source, user.get());
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -287,7 +287,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = commandGive(source, user.get(), args.get(2));
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -307,7 +307,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = commandTake(source, user.get(), args.get(2));
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -329,7 +329,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = true;
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -346,7 +346,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = true;
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -364,7 +364,7 @@ public class EECommand extends ECommand<EverEconomy> {
 
 	private boolean commandReload(final CommandSource player) {
 		this.plugin.reload();
-		player.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("RELOAD_COMMAND")));
+		player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("RELOAD_COMMAND")));
 		return true;
 	}
 	
@@ -437,11 +437,11 @@ public class EECommand extends ECommand<EverEconomy> {
 				}
 			// Impossible de reset
 			} else {
-				staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
+				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
 		}
 		return resultat;
 	}
@@ -522,15 +522,15 @@ public class EECommand extends ECommand<EverEconomy> {
 									.build());
 					}
 				} else {
-					staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+					staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
 				}
 			// Nombre invalide
 			} catch(NumberFormatException e) {
-				staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
 		}
 		return resultat;
 	}
@@ -607,15 +607,15 @@ public class EECommand extends ECommand<EverEconomy> {
 									.build());
 					}
 				} else {
-					staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+					staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
 				}
 			// Nombre invalide
 			} catch(NumberFormatException e) {
-				staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
 		}
 		return resultat;
 	}
@@ -632,7 +632,7 @@ public class EECommand extends ECommand<EverEconomy> {
 			lists.add(this.plugin.getMessages().getText("LOG_EMPTY"));
 		}
 		
-		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(UtilsChat.of(this.plugin.getService().replace(
+		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(EChat.of(this.plugin.getService().replace(
 				this.plugin.getMessages().getMessage("LOG_TITLE")
 					.replaceAll("<player>", user.getName()))), 
 				lists, player);
@@ -643,9 +643,9 @@ public class EECommand extends ECommand<EverEconomy> {
 		
 		if(logs.isEmpty()) {
 			if(player.getIdentifier().equals(user.getIdentifier())) {
-				player.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT_EMPTY_EQUALS"))));
+				player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT_EMPTY_EQUALS"))));
 			} else {
-				player.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT_EMPTY"))));
+				player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT_EMPTY"))));
 			}
 		} else {
 			File file = this.plugin.getPath().resolve("logs/" + user.getName() + ".log").toFile();
@@ -677,7 +677,7 @@ public class EECommand extends ECommand<EverEconomy> {
 								.build());
 				}
 			} catch (IOException e) {
-				player.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
+				player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
 			} finally {
 				try {if(write != null) write.close();} catch (IOException e) {}
 			}

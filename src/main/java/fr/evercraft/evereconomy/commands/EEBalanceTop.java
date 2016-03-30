@@ -30,8 +30,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
-import fr.evercraft.everapi.sponge.UtilsChat;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EverEconomy;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
@@ -47,7 +47,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return UtilsChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_TOP_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_TOP_DESCRIPTION")));
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -106,7 +106,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 			this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(this.plugin.getMessages().getText("BALANCE_TOP_TITLE"), lists, staff);
 		// Le service d'économie n'est pas EverEconomy
 		} else {
-			staff.sendMessage(UtilsChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
+			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
 		}
 		return resultat;
 	}

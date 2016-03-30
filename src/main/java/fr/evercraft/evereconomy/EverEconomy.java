@@ -30,7 +30,10 @@ import fr.evercraft.evereconomy.service.economy.EEconomyService;
 		description = "Management of the economy",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut","lesbleu"},
-		dependencies = {@Dependency(id = "fr.evercraft.everapi")})
+		dependencies = {
+		    @Dependency(id = "fr.evercraft.everapi", version = "1.0"),
+		    @Dependency(id = "fr.evercraft.everchat", optional = true)
+		})
 public class EverEconomy extends EPlugin {
 
 	private EEConfig configs;
