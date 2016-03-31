@@ -24,7 +24,6 @@ import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.java.UtilsDate;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EverEconomy;
 
@@ -43,7 +42,7 @@ public class ELog {
 			final BigDecimal before, final BigDecimal after, final String transaction, final String to,
 			final String cause) {
 		this.plugin = plugin;
-		this.time = UtilsDate.getString(time.getTime());
+		this.time = this.plugin.getEverAPI().getManagerUtils().getDate().parseDateTime(time.getTime());
 		this.currency = currency;
 		this.before = before;
 		this.after = after;
