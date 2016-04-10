@@ -4,7 +4,7 @@ EverEconomy
 A minecraft plugin for Sponge platforms.
 
 ## Links ##
-* [Source](https://github.com/EverCraft/EverEconomy)
+* [Download](https://github.com/EverCraft/EverEconomy/releases)
 * [Wiki](http://wiki.evercraft.fr)
 * [Issues](https://github.com/EverCraft/EverEconomy/issues)
 * [Website](http://evercraft.fr)
