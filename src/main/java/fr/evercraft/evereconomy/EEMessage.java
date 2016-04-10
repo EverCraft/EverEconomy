@@ -31,52 +31,52 @@ public class EEMessage extends EMessage {
 		
 		addDefault("description", "Gestion de l'Economie");
 		
-		addDefault("balance.description", "Connaître le nombre d'<money_singular> d'un joueur");
-		addDefault("balance.player", "&7Vous avez actuellement &6<solde> <symbol>&7.");
-		addDefault("balance.others", "&6<player>&7 a actuellement &6<solde> <symbol>&7.");
+		addDefault("balance.description", "Connaître le nombre d'<money_singular> d'un joueur", "Gives the current balance of a player.");
+		addDefault("balance.player", "&7Vous avez actuellement &6<solde> <symbol>&7.", "&7Balance : &6<solde> <symbol>");
+		addDefault("balance.others", "&6<player>&7 a actuellement &6<solde> <symbol>&7.", "&7Balance of <player> : &6<solde> <symbol>");
 		
-		addDefault("balancetop.description", "Connaître les joueurs qui possèdent le plus d'<money_singular>");
-		addDefault("balancetop.title", "&aTop Economie");
+		addDefault("balancetop.description", "Connaître les joueurs qui possèdent le plus d'<money_singular>", "Displays the top account balances.");
+		addDefault("balancetop.title", "&aClassement : Economie", "&a Top Balances");
 		addDefault("balancetop.line", "    &a<number>. &6<player> &7: &6<solde> <symbol>");
-		addDefault("balancetop.empty", "    &7Aucun compte");
+		addDefault("balancetop.empty", "    &7Aucun compte", "    &7No account");
 		
-		addDefault("pay.description", "Envoyer des <money_plural> à un joueur");
-		addDefault("pay.staff", "&7Vous avez envoyé &6<amount> <symbol>&7 à &6<player>&7.");
-		addDefault("pay.player", "&7Vous avez reçu &6<amount> <symbol>&7 de la part de &6<staff>&7.");
-		addDefault("pay.errorMin", "&cVous n'avez pas &6<amount>&c.");
-		addDefault("pay.errorMax", "&6<player> &ca déjà trop <money_plural>&c.");
-		addDefault("pay.errorEqual", "&cVous ne pouvez vous envoyé des <money_plural>&c.");
+		addDefault("pay.description", "Envoyer des <money_plural> à un joueur", "Pays a specified player from your balance.");
+		addDefault("pay.staff", "&7Vous avez envoyé &6<amount> <symbol>&7 à &6<player>&7.", "&7You sent &6<amount> <symbol>&7 &6<player>&7.");
+		addDefault("pay.player", "&7Vous avez reçu &6<amount> <symbol>&7 de la part de &6<staff>&7.", "&7You have received &6<amount> <symbol>&7 from &6<staff>&7.");
+		addDefault("pay.errorMin", "&cVous n'avez pas &6<amount>&c.", "&cYou do not have &6<amount>&c.");
+		addDefault("pay.errorMax", "&6<player> &ca déjà trop <money_plural>&c.", "&6<player> &chas already too much <money_plural>&c.");
+		addDefault("pay.errorEqual", "&cVous ne pouvez pas vous envoyer des <money_plural>&c." , "&cYou can not send you <money_plural>&c.");
 		
-		addDefault("give.description", "Donner des <money_plural> à un joueur");
-		addDefault("give.player", "&7Vous vous êtes donné &6<amount><symbol>&7.");
-		addDefault("give.othersPlayer", "&6<staff>&7 vous a donné &6<amount> <symbol>&7.");
-		addDefault("give.othersStaff", "&7Vous avez donné &6<amount> <symbol>&7 à &6<player>&7.");
-		addDefault("give.errorMax", "&6<player> &ca déjà trop <money_plural>&c.");
-		addDefault("give.errorMaxEquals", "&cVous avez déjà trop <money_plural>&c.");
+		addDefault("give.description", "Donner des <money_plural> à un joueur", "Give <money_plural> to a player");
+		addDefault("give.player", "&7Vous vous êtes donné &6<amount><symbol>&7.", "&7You gave yourselves &6<amount><symbol>&7.");
+		addDefault("give.othersPlayer", "&6<staff>&7 vous a donné &6<amount> <symbol>&7.", "&6<staff>&7 gave you &6<amount> <symbol>&7.");
+		addDefault("give.othersStaff", "&7Vous avez donné &6<amount> <symbol>&7 à &6<player>&7.", "&7You gave &6<amount> <symbol>&7 &6<player>&7.");
+		addDefault("give.errorMax", "&6<player> &ca déjà trop <money_plural>&c.", "&6<player> &chas already too much <money_plural>&c.");
+		addDefault("give.errorMaxEquals", "&cVous avez déjà trop <money_plural>&c.", "&cYou have already too many <money_plural>&c.");
 		
-		addDefault("take.description", "Retirer des <money_plural> à un joueur");
-		addDefault("take.player", "&7Vous vous êtes retiré &6<amount> <symbol>&7.");
-		addDefault("take.othersPlayer", "&6<staff>&7 vous a retiré &6<amount> <symbol>&7.");
-		addDefault("take.othersStaff", "&7Vous avez retiré &6<amount> <symbol>&7 à &6<player>&7.");
-		addDefault("take.errorMin", "&6<player> &cn'a pas assez <money>&c.");
-		addDefault("take.errorMinEquals", "&cVous n'avez pas assez <money>&c.");
+		addDefault("take.description", "Retirer des <money_plural> à un joueur", "Withdrawing <money_plural> from a player");
+		addDefault("take.player", "&7Vous vous êtes retiré &6<amount> <symbol>&7.", "&7You withdrew &6<amount> <symbol>&7.");
+		addDefault("take.othersPlayer", "&6<staff>&7 vous a retiré &6<amount> <symbol>&7.", "&6<amount> <symbol>&7has been taken from your account.");
+		addDefault("take.othersStaff", "&7Vous avez retiré &6<amount> <symbol>&7 à &6<player>&7.", "&6<amount> <symbol>&7 taken from &6<player> &7a account.");
+		addDefault("take.errorMin", "&6<player> &cn'a pas assez <money>&c.", "&6<player> &cdoes not have enough <money>&c.");
+		addDefault("take.errorMinEquals", "&cVous n'avez pas assez <money>&c.", "&cYou do not have enough <money>&c.");
 		
-		addDefault("reset.description", "Réinitialiser les <money_plural> d'un joueur");
-		addDefault("reset.player", "&7Vous avez réinitialisé votre compte.");
-		addDefault("reset.othersPlayer", "&7Votre compte a été réinitialisé par &6<staff>&7.");
-		addDefault("reset.othersStaff", "&7Vous avez réinitialisé le compte de &6<player>&7.");
+		addDefault("reset.description", "Réinitialiser les <money_plural> d'un joueur", "Reset the currency of a player");
+		addDefault("reset.player", "&7Vous avez réinitialisé votre compte.", "&7You have reset your account.");
+		addDefault("reset.othersPlayer", "&7Votre monnaie a été réinitialisé par &6<staff>&7.", "&7Your money has been reset by &6<staff>&7.");
+		addDefault("reset.othersStaff", "&7Vous avez réinitialisé le compte de &6<player>&7.", "&7You have reset the currency &6<player>&7.");
 		
-		addDefault("log.description", "Connaître l'historique des transactions d'un joueur");
-		addDefault("log.title", "&aHistorique de &6<player> &a: &6<money_plural>");
+		addDefault("log.description", "Connaître l'historique des transactions d'un joueur", "Know the history of the transactions of a player");
+		addDefault("log.title", "&aHistorique de &6<player> &a: &6<money_plural>", "&aTransactions of &6<player> &a: &6<money_plural>");
 		addDefault("log.lineTransaction", "    &7<time> &6: &7<type> &6: &7<before_format> &6: &7<after_format> &6: &7<cause>");
 		addDefault("log.lineTransfert", "    &7<time> &6: &7<type> &6: &7<before_format> &6: &7<after_format> &6: &7<player> &6: &7<cause>");
-		addDefault("log.empty", "    &7Aucun transaction");
-		addDefault("log.print", "&7Les logs de &6<player> &7ont été transféré dans le fichier &6<file>&7.");
-		addDefault("log.printEquals", "&7Vos logs ont été transféré dans le fichier &6<file>&7.");
+		addDefault("log.empty", "    &7Aucune transaction", "    &7No transaction");
+		addDefault("log.print", "&7L'historique des transactions de &6<player> &7a été transféré dans le fichier &6<file>&7.", "&7The history of &6<player> &7transactions was transferred to the file &6<file>&7.");
+		addDefault("log.printEquals", "&7Vos logs ont été transféré dans le fichier &6<file>&7.", "&7The history of your transactions transferred into the file &6<file>&7.");
 		addDefault("log.printLineTransaction", "[<time>] &7<type> &6: (before='<before>';after='<after>';cause='<cause>')");
 		addDefault("log.printLineTransfert", "[<time>] &7<type> &6: (before='<before>';after='<after>';cause='<cause>')");
-		addDefault("log.printEmpty", "&6<player> &7n'a fait aucune transaction.");
-		addDefault("log.printEmptyEquals", "&7Vous n'a fait aucune transaction.");
+		addDefault("log.printEmpty", "&6<player> &7n'a fait aucune transaction.", "&6<player> &7has not traded");
+		addDefault("log.printEmptyEquals", "&7Vous n'avez effectué aucune transaction.", "&7You have not made any transaction.");
 	}
 
 	@Override
