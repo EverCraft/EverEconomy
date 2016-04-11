@@ -89,7 +89,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 			preparedStatement.setBigDecimal(4, after);
 			preparedStatement.setString(5, transaction.getName());
 			preparedStatement.setString(6, to);
-			preparedStatement.setString(7, cause.toString());
+			preparedStatement.setString(7, String.join(", ", cause.getNamedCauses().keySet()));
 			
 			preparedStatement.execute();
 			this.plugin.getLogger().debug("Log : (identifier='" + identifier + "';"
@@ -98,7 +98,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 													+ "after='" + after + "';"
 													+ "transaction='" + transaction.getName() + "';"
 													+ "to='" + to + "';"
-													+ "cause='" + cause + "')");
+													+ "cause='" + String.join(", ", cause.getNamedCauses().keySet()) + "')");
 		} catch (SQLException e) {
 	    	this.plugin.getLogger().warn("Error during a change of log : " + e.getMessage());
 		} catch (ServerDisableException e) {
