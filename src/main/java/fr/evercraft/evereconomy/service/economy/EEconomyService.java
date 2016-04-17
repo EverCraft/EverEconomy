@@ -210,7 +210,6 @@ public class EEconomyService implements EconomyService {
 	public LinkedHashMap<UUID, BigDecimal> topUniqueAccount(final Currency currency, final int count) {
 		LinkedHashMap<UUID, BigDecimal> top = new LinkedHashMap<UUID, BigDecimal>();
 		
-		
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
@@ -222,7 +221,7 @@ public class EEconomyService implements EconomyService {
 						+ "AND LENGTH(identifier) = 36 "
 						+ "ORDER BY `balance` DESC, `identifier` ASC "
 						+ "LIMIT 0, " + count + " ;";
-			preparedStatement = this.plugin.getDataBases().getConnection().prepareStatement(query);
+			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, currency.getId());
 			ResultSet list = preparedStatement.executeQuery();
 			while(list.next()){

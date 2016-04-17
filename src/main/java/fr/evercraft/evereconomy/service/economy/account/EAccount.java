@@ -291,7 +291,7 @@ public abstract class EAccount implements Account {
 		try {
 			connection = this.plugin.getDataBases().getConnection();
 			String query = "SELECT `currency`, `balance` FROM `" + this.plugin.getDataBases().getTableAccount() + "` WHERE identifier = ? ;";
-			preparedStatement = this.plugin.getDataBases().getConnection().prepareStatement(query);
+			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, this.identifier);
 			ResultSet list = preparedStatement.executeQuery();
 			while(list.next()) {
@@ -301,6 +301,13 @@ public abstract class EAccount implements Account {
 					this.plugin.getLogger().debug("Log : (identifier='" + identifier + "';"
 														+ "currency='" + currency.get().getId() + "';"
 														+ "balance='" + list.getBigDecimal("balance").toString() + "')");
+				}
+			}
+			for (Currency currency : this.plugin.getService().getCurrencies()) {
+				if(!this.currencies.containsKey(currency)) {
+					BigDecimal balance = getDefaultBalance(currency);
+					this.currencies.put(currency, balance);
+					this.insert(connection, currency);
 				}
 			}
 		} catch (SQLException e) {
@@ -317,9 +324,19 @@ public abstract class EAccount implements Account {
 	
 	public void insert(final Currency currency) {
 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
 		try {
 			connection = this.plugin.getDataBases().getConnection();
+			this.insert(connection, currency);
+		} catch (ServerDisableException e) {
+			e.execute();
+		} finally {
+			try {if (connection != null) connection.close();} catch (SQLException e) {}
+	    }
+	}
+	
+	public void insert(Connection connection, final Currency currency) {
+		PreparedStatement preparedStatement = null;
+		try {
 			String query = "INSERT INTO `" + this.plugin.getDataBases().getTableAccount() + "` VALUES(?, ?, ?);";
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, this.identifier);
@@ -333,13 +350,8 @@ public abstract class EAccount implements Account {
 	    	this.plugin.getLogger().warn("Error during a change of account : (identifier:'" + this.identifier + "';"
 	    																	+ "currency:'" + currency.getName() + "';"
 	    																	+ "balance:" + this.getBalance(currency) + "'): " + e.getMessage());
-		} catch (ServerDisableException e) {
-			e.execute();
 		} finally {
-			try {
-				if (preparedStatement != null) preparedStatement.close();
-				if (connection != null) connection.close();
-			} catch (SQLException e) {}
+			try {if (preparedStatement != null) preparedStatement.close();} catch (SQLException e) {}
 	    }
 	}
 	
