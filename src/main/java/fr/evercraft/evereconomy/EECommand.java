@@ -29,7 +29,6 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.text.LiteralText.Builder;
@@ -38,6 +37,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.services.pagination.ESubCommand;
+import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
@@ -405,7 +405,7 @@ public class EECommand extends ECommand<EverEconomy> {
 		// Le compte existe
 		if(account.isPresent()) {
 			// Reset
-			if(account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), Cause.source(staff).build()).getResult().equals(ResultType.SUCCESS)){
+			if(account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), UtilsCause.command(this.plugin, staff)).getResult().equals(ResultType.SUCCESS)){
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				resultat = true;
 				// La source et le joueur sont différent
@@ -457,7 +457,7 @@ public class EECommand extends ECommand<EverEconomy> {
 				BigDecimal amount = new BigDecimal(Double.parseDouble(amount_name));
 				amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
 				
-				ResultType result = account.get().deposit(this.plugin.getService().getDefaultCurrency(), amount, Cause.source(staff).build()).getResult();
+				ResultType result = account.get().deposit(this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				// Transaction réussit
 				if(result.equals(ResultType.SUCCESS)) {
@@ -546,7 +546,7 @@ public class EECommand extends ECommand<EverEconomy> {
 				BigDecimal amount = new BigDecimal(Double.parseDouble(amount_name));
 				amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
 				
-				ResultType result = account.get().withdraw(this.plugin.getService().getDefaultCurrency(), amount, Cause.source(staff).build()).getResult();
+				ResultType result = account.get().withdraw(this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				// Le compte existe
 				if(result.equals(ResultType.SUCCESS)) {

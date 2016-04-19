@@ -69,12 +69,12 @@ public class EEMessage extends EMessage {
 		addDefault("log.description", "Connaître l'historique des transactions d'un joueur", "Know the history of the transactions of a player");
 		addDefault("log.title", "&aHistorique de &6<player> &a: &6<money_plural>", "&aTransactions of &6<player> &a: &6<money_plural>");
 		addDefault("log.lineTransaction", "&c<time> &6: &7<transaction> &6: &b<before> &6: &a<after> &8: &7<cause>");
-		addDefault("log.lineTransfert", "&c<time> &6: &7<transaction> &6: &b<before> &6: &a<after> &6: &dz<player> &8: &7<cause>");
+		addDefault("log.lineTransfert", "&c<time> &6: &7<transaction> &6: &b<before> &6: &a<after> &6: &d<player> &8: &7<cause>");
 		addDefault("log.empty", "    &7Aucune transaction", "    &7No transaction");
 		addDefault("log.print", "&7L'historique des transactions de &6<player> &7a été transféré dans le fichier &6<file>&7.", "&7The history of &6<player> &7transactions was transferred to the file &6<file>&7.");
 		addDefault("log.printEquals", "&7Vos logs ont été transféré dans le fichier &6<file>&7.", "&7The history of your transactions transferred into the file &6<file>&7.");
 		addDefault("log.printLineTransaction", "[<time>] &7<transaction> &6: (before='<before>';after='<after>';cause='<cause>')");
-		addDefault("log.printLineTransfert", "[<time>] &7<transaction> &6: (before='<before>';after='<after>';cause='<cause>')");
+		addDefault("log.printLineTransfert", "[<time>] &7<transaction> &6: (before='<before>';after='<after>';to='<player>';cause='<cause>')");
 		addDefault("log.printEmpty", "&6<player> &7n'a fait aucune transaction.", "&6<player> &7hasn't traded");
 		addDefault("log.printEmptyEquals", "&7Vous n'avez effectué aucune transaction.", "&7You haven't made any transaction.");
 	}
