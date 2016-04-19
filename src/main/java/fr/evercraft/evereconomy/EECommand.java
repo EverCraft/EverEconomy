@@ -557,6 +557,7 @@ public class EECommand extends ECommand<EverEconomy> {
 								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
 									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_OTHERS_STAFF"))
 											.replaceAll("<player>", user.getName())
+											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
 									.build());
@@ -567,6 +568,7 @@ public class EECommand extends ECommand<EverEconomy> {
 									ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
 										.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_OTHERS_PLAYER"))
 												.replaceAll("<staff>", staff.getName())
+												.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 												.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 										.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
 										.build());

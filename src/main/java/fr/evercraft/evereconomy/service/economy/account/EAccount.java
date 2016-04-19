@@ -109,12 +109,10 @@ public abstract class EAccount implements Account {
 	public void setBalance(final Currency currency, final BigDecimal amount) {
 		if(!this.currencies.containsKey(currency)){
 			this.currencies.put(currency, amount);
-			this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.insert(currency))
-				.name("insert").submit(this.plugin);
+			this.plugin.getThreadAsync().execute(() -> this.insert(currency));
 		}
 		this.currencies.put(currency, amount);
-		this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.update(currency))
-			.name("update").submit(this.plugin);
+		this.plugin.getThreadAsync().execute(() -> this.update(currency));
 	}
 
 	@Override
@@ -163,19 +161,18 @@ public abstract class EAccount implements Account {
 			}
 			
 			// Transfére
+			this.setBalance(currency, after);
 			this.log(currency, before, after, transaction, cause);
 			
 			list.put(currency, new ETransactionResult(this.plugin, this, currency, amount.abs(), contexts, ResultType.SUCCESS, transaction));
 		}
-		this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.delete())
-			.name("resetAll").submit(this.plugin);
+		this.plugin.getThreadAsync().execute(() -> this.delete());
 		return list;
 	}
 
 	@Override
 	public TransactionResult resetBalance(final Currency currency, final Cause cause, final Set<Context> contexts) {
 		TransactionType transaction = TransactionTypes.WITHDRAW;
-		ResultType result = ResultType.FAILED;
 		
 		BigDecimal before = this.getBalance(currency);
 		BigDecimal after = getDefaultBalance(currency);
@@ -187,11 +184,10 @@ public abstract class EAccount implements Account {
 		}
 		
 		// Transfére
-		this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.delete(currency))
-			.name("reset").submit(this.plugin);
+		this.setBalance(currency, after);
 		this.log(currency, before, after, transaction, cause);
 		
-		return new ETransactionResult(this.plugin, this, currency, amount.abs(), contexts, result, transaction);
+		return new ETransactionResult(this.plugin, this, currency, amount.abs(), contexts, ResultType.SUCCESS, transaction);
 	}
 
 	@Override
@@ -276,13 +272,11 @@ public abstract class EAccount implements Account {
 	}
 
 	public void log(final Currency currency, final BigDecimal before, final BigDecimal after, final TransactionType transaction, final Cause cause) {
-		this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.plugin.getDataBases().log(this.identifier, currency, before, after, transaction, cause, null))
-			.name("log").submit(this.plugin);
+		this.plugin.getThreadAsync().execute(() -> this.plugin.getDataBases().log(this.identifier, currency, before, after, transaction, cause, null));
 	}
 	
 	public void log(final Currency currency, final BigDecimal before, final BigDecimal after, final TransactionType transaction, final Cause cause, final String to) {
-		this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.plugin.getDataBases().log(this.identifier, currency, before, after, transaction, cause, to))
-			.name("log").submit(this.plugin);
+		this.plugin.getThreadAsync().execute(() -> this.plugin.getDataBases().log(this.identifier, currency, before, after, transaction, cause, to));
 	}
 	
 	public void select() {
