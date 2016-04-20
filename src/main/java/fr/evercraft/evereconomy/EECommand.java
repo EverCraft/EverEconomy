@@ -660,7 +660,7 @@ public class EECommand extends ECommand<EverEconomy> {
 				write = new FileWriter(file);
 				for(ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
 					write.write(log.replace(this.plugin.getMessages().getMessage("LOG_PRINT_LINE_TRANSACTION"),
-											this.plugin.getMessages().getMessage("LOG_PRINT_LINE_TRANSFERT")).toPlain());
+											this.plugin.getMessages().getMessage("LOG_PRINT_LINE_TRANSFERT")).toPlain() + "\n");
 				}
 				
 				if(player.getIdentifier().equals(user.getIdentifier())) {
