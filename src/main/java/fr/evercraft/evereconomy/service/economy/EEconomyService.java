@@ -44,11 +44,12 @@ import com.google.common.cache.LoadingCache;
 
 import fr.evercraft.everapi.exception.ServerDisableException;
 import fr.evercraft.everapi.java.Chronometer;
+import fr.evercraft.everapi.services.economy.TopEconomyService;
 import fr.evercraft.evereconomy.EverEconomy;
 import fr.evercraft.evereconomy.service.economy.account.EUniqueAccount;
 import fr.evercraft.evereconomy.service.economy.account.EVirtualAccount;
 
-public class EEconomyService implements EconomyService {
+public class EEconomyService implements TopEconomyService, EconomyService {
 	private final EverEconomy plugin;
 	
 	private final ConcurrentMap<String, ECurrency> currencies;

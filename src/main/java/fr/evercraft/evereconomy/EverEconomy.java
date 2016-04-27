@@ -22,6 +22,7 @@ import org.spongepowered.api.service.economy.EconomyService;
 
 import fr.evercraft.everapi.exception.PluginDisableException;
 import fr.evercraft.everapi.plugin.EPlugin;
+import fr.evercraft.everapi.services.economy.TopEconomyService;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
 
 @Plugin(id = "fr.evercraft.evereconomy", 
@@ -59,6 +60,7 @@ public class EverEconomy extends EPlugin {
 		// Economy
 		this.service = new EEconomyService(this);
 		this.getGame().getServiceManager().setProvider(this, EconomyService.class, this.service);
+		this.getGame().getServiceManager().setProvider(this, TopEconomyService.class, this.service);
 	}
 	
 	@Override
