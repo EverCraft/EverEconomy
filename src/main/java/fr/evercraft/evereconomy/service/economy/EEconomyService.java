@@ -230,6 +230,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 					top.put(UUID.fromString(list.getString("identifier")), list.getBigDecimal("balance"));
 				} catch (IllegalArgumentException e) {}
 			}
+			this.plugin.getLogger().debug("Top economy : (currency:'" + currency.getId() + "')");
 		} catch (SQLException e) {
 			this.plugin.getLogger().warn("Error during a change of top : (currency:'" + currency.getId() + "'): " + e.getMessage());
 		} catch (ServerDisableException e) {
