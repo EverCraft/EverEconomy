@@ -158,7 +158,7 @@ public class EEPay extends ECommand<EverEconomy> {
 				} else {
 					staff.sendMessage(
 							ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-								.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_PLAYER_EQUAL"))
+								.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_ERROR_EQUALS"))
 										.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount)))
 								.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
 								.build());
