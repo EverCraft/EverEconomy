@@ -36,6 +36,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.services.pagination.ESubCommand;
 import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.everapi.plugin.EChat;
@@ -60,7 +61,7 @@ public class EECommand extends ECommand<EverEconomy> {
     }
 	
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("EVERECONOMY"));
+		return source.hasPermission(EEPermissions.EVERECONOMY.get());
 	}
 
 	public Text description(final CommandSource source) {
@@ -70,53 +71,53 @@ public class EECommand extends ECommand<EverEconomy> {
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if(args.size() == 1){
-			if(source.hasPermission(this.plugin.getPermissions().get("HELP"))){
+			if(source.hasPermission(EEPermissions.HELP.get())){
 				suggests.add("help");
 			}
-			if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))){
+			if(source.hasPermission(EEPermissions.RELOAD.get())){
 				suggests.add("reload");
 			}
-			if(source.hasPermission(this.plugin.getPermissions().get("RESET"))){
+			if(source.hasPermission(EEPermissions.RESET.get())){
 				suggests.add("reset");
 			}
-			if(source.hasPermission(this.plugin.getPermissions().get("GIVE"))){
+			if(source.hasPermission(EEPermissions.GIVE.get())){
 				suggests.add("give");
 			}
-			if(source.hasPermission(this.plugin.getPermissions().get("TAKE"))){
+			if(source.hasPermission(EEPermissions.TAKE.get())){
 				suggests.add("take");
 			}
-			if(source.hasPermission(this.plugin.getPermissions().get("LOG"))){
+			if(source.hasPermission(EEPermissions.LOG.get())){
 				suggests.add("log");
 			}
 		} else if(args.size() == 2){
 			if(args.get(0).equalsIgnoreCase("reset")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("RESET"))){
+				if(source.hasPermission(EEPermissions.RESET.get())){
 					suggests = null;
 				}
 			} else if(args.get(0).equalsIgnoreCase("give")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("GIVE"))){
+				if(source.hasPermission(EEPermissions.GIVE.get())){
 					suggests = null;
 				}
 			} else if(args.get(0).equalsIgnoreCase("take")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("TAKE"))){
+				if(source.hasPermission(EEPermissions.TAKE.get())){
 					suggests = null;
 				}
 			} else if(args.get(0).equalsIgnoreCase("log")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("LOG"))){
+				if(source.hasPermission(EEPermissions.LOG.get())){
 					suggests = null;
 				}
 			}
 		} else if(args.size() == 2){
 			if(args.get(0).equalsIgnoreCase("give")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("GIVE"))){
+				if(source.hasPermission(EEPermissions.GIVE.get())){
 					suggests.add("1");
 				}
 			} else if(args.get(0).equalsIgnoreCase("take")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("TAKE"))){
+				if(source.hasPermission(EEPermissions.TAKE.get())){
 					suggests.add("1");
 				}
 			} else if(args.get(0).equalsIgnoreCase("log")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("LOG")) && source.hasPermission(this.plugin.getPermissions().get("LOG_PRINT"))){
+				if(source.hasPermission(EEPermissions.LOG.get()) && source.hasPermission(EEPermissions.LOG_PRINT.get())){
 					suggests.add("print");
 				}
 			}
@@ -125,12 +126,12 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 
 	public Text help(final CommandSource source) {
-		boolean help = source.hasPermission(this.plugin.getPermissions().get("HELP"));
-		boolean reload = source.hasPermission(this.plugin.getPermissions().get("RELOAD"));
-		boolean give = source.hasPermission(this.plugin.getPermissions().get("GIVE"));
-		boolean take = source.hasPermission(this.plugin.getPermissions().get("TAKE"));
-		boolean reset = source.hasPermission(this.plugin.getPermissions().get("RESET"));
-		boolean log = source.hasPermission(this.plugin.getPermissions().get("LOG"));
+		boolean help = source.hasPermission(EEPermissions.HELP.get());
+		boolean reload = source.hasPermission(EEPermissions.RELOAD.get());
+		boolean give = source.hasPermission(EEPermissions.GIVE.get());
+		boolean take = source.hasPermission(EEPermissions.TAKE.get());
+		boolean reset = source.hasPermission(EEPermissions.RESET.get());
+		boolean log = source.hasPermission(EEPermissions.LOG.get());
 
 		Builder build;
 		if(help || reload || give || take || reset || log){
@@ -222,7 +223,7 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 	
 	public Text helpLog(final CommandSource source) {
-		if(source.hasPermission(this.plugin.getPermissions().get("LOG_PRINT"))) {
+		if(source.hasPermission(EEPermissions.LOG_PRINT.get())) {
 			return Text.builder("/" + this.getName() + " log <" + this.plugin.getEverAPI().getMessages().getArg("player") + "> [print]")
 					.onClick(TextActions.suggestCommand("/" + this.getName() + " log"))
 					.color(TextColors.RED)
@@ -241,26 +242,26 @@ public class EECommand extends ECommand<EverEconomy> {
 		// HELP
 		if(args.size() == 0 || (args.size() == 1 && args.get(0).equals("help"))) {
 			// Si il a la permission
-			if(source.hasPermission(this.plugin.getPermissions().get("HELP"))){
+			if(source.hasPermission(EEPermissions.HELP.get())){
 				resultat = commandHelp(source);
 			// Il n'a pas la permission
 			} else {
-				source.sendMessage(this.plugin.getPermissions().noPermission());
+				source.sendMessage(EAMessages.NO_PERMISSION.getText());
 			}
 		// RELOAD
 		} else if(args.size() == 1 && args.get(0).equals("reload")) {
 			// Si il a la permission
-			if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))){
+			if(source.hasPermission(EEPermissions.RELOAD.get())){
 				resultat = commandReload(source);
 			// Il n'a pas la permission
 			} else {
-				source.sendMessage(this.plugin.getPermissions().noPermission());
+				source.sendMessage(EAMessages.NO_PERMISSION.getText());
 			}
 		// RESET
 		} else if(args.size() >= 2 && args.get(0).equals("reset")) {
 			if(args.size() == 2) {
 				// Si il a la permission
-				if(source.hasPermission(this.plugin.getPermissions().get("RESET"))){
+				if(source.hasPermission(EEPermissions.RESET.get())){
 					Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
 					// Le joueur existe
 					if(user.isPresent()){
@@ -271,7 +272,7 @@ public class EECommand extends ECommand<EverEconomy> {
 					}
 				// Il n'a pas la permission
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else {
 				source.sendMessage(this.helpReset(source));
@@ -280,7 +281,7 @@ public class EECommand extends ECommand<EverEconomy> {
 		} else if(args.size() >= 3 && args.get(0).equals("give")){
 			if(args.size() == 3) {
 				// Si il a la permission
-				if(source.hasPermission(this.plugin.getPermissions().get("GIVE"))){
+				if(source.hasPermission(EEPermissions.GIVE.get())){
 					Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
 					// Le joueur existe
 					if(user.isPresent()){
@@ -291,7 +292,7 @@ public class EECommand extends ECommand<EverEconomy> {
 					}
 				// Il n'a pas la permission
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else {
 				source.sendMessage(this.helpGive(source));
@@ -300,7 +301,7 @@ public class EECommand extends ECommand<EverEconomy> {
 		} else if(args.size() >= 3 && args.get(0).equals("take")){
 			if(args.size() == 3) {
 				// Si il a la permission
-				if(source.hasPermission(this.plugin.getPermissions().get("TAKE"))){
+				if(source.hasPermission(EEPermissions.TAKE.get())){
 					Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
 					// Le joueur existe
 					if(user.isPresent()){
@@ -311,7 +312,7 @@ public class EECommand extends ECommand<EverEconomy> {
 					}
 				// Il n'a pas la permission
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else {
 				source.sendMessage(this.helpTake(source));
@@ -320,7 +321,7 @@ public class EECommand extends ECommand<EverEconomy> {
 		} else if(args.size() >= 2 && args.get(0).equals("log")){
 			if(args.size() == 2) {
 				// Si il a la permission
-				if(source.hasPermission(this.plugin.getPermissions().get("LOG"))){
+				if(source.hasPermission(EEPermissions.LOG.get())){
 					final Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
 					// Le joueur existe
 					if(user.isPresent()){
@@ -333,11 +334,11 @@ public class EECommand extends ECommand<EverEconomy> {
 					}
 				// Il n'a pas la permission
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else if(args.size() == 3) {
 				// Si il a la permission
-				if(source.hasPermission(this.plugin.getPermissions().get("LOG_PRINT"))){
+				if(source.hasPermission(EEPermissions.LOG_PRINT.get())){
 					final Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
 					// Le joueur existe
 					if(user.isPresent()){
@@ -350,7 +351,7 @@ public class EECommand extends ECommand<EverEconomy> {
 					}
 				// Il n'a pas la permission
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else {
 				source.sendMessage(this.helpLog(source));
@@ -379,19 +380,19 @@ public class EECommand extends ECommand<EverEconomy> {
 		if(this.pay.testPermission(source)) {
 			commands.put(this.pay.getName(), new ESubCommand(this.pay.help(source), this.pay.description(source)));
 		}
-		if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
+		if(source.hasPermission(EEPermissions.RELOAD.get())) {
 			commands.put("eco reload", new ESubCommand(this.helpReload(source), this.plugin.getEverAPI().getMessages().getText("RELOAD_DESCRIPTION")));
 		}
-		if(source.hasPermission(this.plugin.getPermissions().get("GIVE"))) {
+		if(source.hasPermission(EEPermissions.GIVE.get())) {
 			commands.put("eco give", new ESubCommand(this.helpGive(source), this.descriptionGive(source)));
 		}
-		if(source.hasPermission(this.plugin.getPermissions().get("TAKE"))) {
+		if(source.hasPermission(EEPermissions.TAKE.get())) {
 			commands.put("eco take", new ESubCommand(this.helpTake(source), this.descriptionTake(source)));
 		}
-		if(source.hasPermission(this.plugin.getPermissions().get("RESET"))) {
+		if(source.hasPermission(EEPermissions.RESET.get())) {
 			commands.put("eco reset", new ESubCommand(this.helpReset(source), this.descriptionReset(source)));
 		}
-		if(source.hasPermission(this.plugin.getPermissions().get("LOG"))) {
+		if(source.hasPermission(EEPermissions.LOG.get())) {
 			commands.put("eco log", new ESubCommand(this.helpLog(source), this.descriptionLog(source)));
 		}
 		this.plugin.getEverAPI().getManagerService().getEPagination().helpSubCommand(commands, source, this.plugin);

@@ -29,10 +29,12 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
 
 public class EEBalance extends ECommand<EverEconomy> {
@@ -42,7 +44,7 @@ public class EEBalance extends ECommand<EverEconomy> {
     }
 		
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("BALANCE"));
+		return source.hasPermission(EEPermissions.BALANCE.get());
 	}
 
 	public Text description(final CommandSource source) {
@@ -51,7 +53,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
-		if(args.size() == 1 && source.hasPermission(this.plugin.getPermissions().get("BALANCE_OTHERS"))){
+		if(args.size() == 1 && source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
 			suggests = null;
 		}
 		return suggests;
@@ -59,7 +61,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 
 	public Text help(final CommandSource source) {
 		Text help;
-		if(source.hasPermission(this.plugin.getPermissions().get("BALANCE_OTHERS"))){
+		if(source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
 			help = Text.builder("/balance [" + this.plugin.getEverAPI().getMessages().getArg("player") + "]")
 					.onClick(TextActions.suggestCommand("/balance "))
 					.color(TextColors.RED)
@@ -90,7 +92,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 		// Si on connait le joueur
 		} else if(args.size() == 1) {
 			// Si il a la permission
-			if(source.hasPermission(this.plugin.getPermissions().get("BALANCE_OTHERS"))){
+			if(source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
 				Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 				// Le joueur existe
 				if(user.isPresent()) {
@@ -101,7 +103,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				}
 			// Il n'a pas la permission
 			} else {
-				source.sendMessage(this.plugin.getPermissions().noPermission());
+				source.sendMessage(EAMessages.NO_PERMISSION.getText());
 			}
 		// Nombre d'argument incorrect
 		} else {

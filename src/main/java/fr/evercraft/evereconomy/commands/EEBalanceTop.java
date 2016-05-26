@@ -33,6 +33,7 @@ import org.spongepowered.api.text.format.TextColors;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
 
@@ -43,7 +44,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
     }
 	
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("BALANCE_TOP"));
+		return source.hasPermission(EEPermissions.BALANCE_TOP.get());
 	}
 
 	public Text description(final CommandSource source) {

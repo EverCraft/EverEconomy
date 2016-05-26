@@ -21,6 +21,7 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.economy.EconomyService;
 
 import fr.evercraft.everapi.exception.PluginDisableException;
+import fr.evercraft.everapi.plugin.EPermission;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.economy.TopEconomyService;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
@@ -39,7 +40,6 @@ public class EverEconomy extends EPlugin {
 
 	private EEConfig configs;
 	private EEMessage messages;
-	private EEPermission permissions;
 	private EEDataBase databases;
 
 	private EEconomyService service;
@@ -49,7 +49,6 @@ public class EverEconomy extends EPlugin {
 		// Configurations
 		this.configs = new EEConfig(this);
 		this.messages = new EEMessage(this);
-		this.permissions = new EEPermission(this);
 		
 		// MySQL
 		this.databases = new EEDataBase(this);
@@ -106,8 +105,8 @@ public class EverEconomy extends EPlugin {
 		return this.messages;
 	}
 	
-	public EEPermission getPermissions(){
-		return this.permissions;
+	public EPermission getPermissions(){
+		return null;
 	}
 	
 	public EEDataBase getDataBases(){

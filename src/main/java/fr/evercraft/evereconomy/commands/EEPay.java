@@ -34,6 +34,7 @@ import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
 
 public class EEPay extends ECommand<EverEconomy> {
@@ -43,7 +44,7 @@ public class EEPay extends ECommand<EverEconomy> {
     }
 	
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("PAY"));
+		return source.hasPermission(EEPermissions.PAY.get());
 	}
 
 	public Text description(final CommandSource source) {
