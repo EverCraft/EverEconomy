@@ -42,6 +42,7 @@ import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.commands.EEBalance;
 import fr.evercraft.evereconomy.commands.EEBalanceTop;
 import fr.evercraft.evereconomy.commands.EEPay;
@@ -65,7 +66,7 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.DESCRIPTION.get()));
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -184,52 +185,52 @@ public class EECommand extends ECommand<EverEconomy> {
 	}
 	
 	public Text descriptionGive(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.GIVE_DESCRIPTION.get()));
 	}
 	
 	public Text helpGive(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " give <" + this.plugin.getEverAPI().getMessages().getArg("player") + "> "
-													  + "<" + this.plugin.getEverAPI().getMessages().getArg("amount") + ">")
+		return Text.builder("/" + this.getName() + " give <" + EAMessages.ARGS_PLAYER.get() + "> "
+													  + "<" + EAMessages.ARGS_AMOUNT.get() + ">")
 					.onClick(TextActions.suggestCommand("/" + this.getName() + " give"))
 					.color(TextColors.RED)
 					.build();
 	}
 	
 	public Text descriptionTake(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.TAKE_DESCRIPTION.get()));
 	}
 	
 	public Text helpTake(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " take <" + this.plugin.getEverAPI().getMessages().getArg("player") + "> "
-													  + "<" + this.plugin.getEverAPI().getMessages().getArg("amount") + ">")
+		return Text.builder("/" + this.getName() + " take <" + EAMessages.ARGS_PLAYER.get() + "> "
+													  + "<" + EAMessages.ARGS_AMOUNT.get() + ">")
 					.onClick(TextActions.suggestCommand("/" + this.getName() + " take"))
 					.color(TextColors.RED)
 					.build();
 	}
 	
 	public Text descriptionReset(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("RESET_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.RESET_DESCRIPTION.get()));
 	}
 	
 	public Text helpReset(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " reset <" + this.plugin.getEverAPI().getMessages().getArg("player") + ">")
+		return Text.builder("/" + this.getName() + " reset <" + EAMessages.ARGS_PLAYER.get() + ">")
 					.onClick(TextActions.suggestCommand("/" + this.getName() + " reset"))
 					.color(TextColors.RED)
 					.build();
 	}
 	
 	public Text descriptionLog(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.LOG_DESCRIPTION.get()));
 	}
 	
 	public Text helpLog(final CommandSource source) {
 		if(source.hasPermission(EEPermissions.LOG_PRINT.get())) {
-			return Text.builder("/" + this.getName() + " log <" + this.plugin.getEverAPI().getMessages().getArg("player") + "> [print]")
+			return Text.builder("/" + this.getName() + " log <" + EAMessages.ARGS_PLAYER.get() + "> [print]")
 					.onClick(TextActions.suggestCommand("/" + this.getName() + " log"))
 					.color(TextColors.RED)
 					.build();
 		}
-		return Text.builder("/" + this.getName() + " log <" + this.plugin.getEverAPI().getMessages().getArg("player") + ">")
+		return Text.builder("/" + this.getName() + " log <" + EAMessages.ARGS_PLAYER.get() + ">")
 					.onClick(TextActions.suggestCommand("/" + this.getName() + " log"))
 					.color(TextColors.RED)
 					.build();
@@ -268,7 +269,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = commandReset(source, user.get());
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -288,7 +289,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = commandGive(source, user.get(), args.get(2));
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -308,7 +309,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = commandTake(source, user.get(), args.get(2));
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -330,7 +331,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = true;
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -347,7 +348,7 @@ public class EECommand extends ECommand<EverEconomy> {
 						resultat = true;
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+						source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
 					}
 				// Il n'a pas la permission
 				} else {
@@ -365,7 +366,7 @@ public class EECommand extends ECommand<EverEconomy> {
 
 	private boolean commandReload(final CommandSource player) {
 		this.plugin.reload();
-		player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("RELOAD_COMMAND")));
+		player.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.RELOAD_COMMAND.get()));
 		return true;
 	}
 	
@@ -381,7 +382,7 @@ public class EECommand extends ECommand<EverEconomy> {
 			commands.put(this.pay.getName(), new ESubCommand(this.pay.help(source), this.pay.description(source)));
 		}
 		if(source.hasPermission(EEPermissions.RELOAD.get())) {
-			commands.put("eco reload", new ESubCommand(this.helpReload(source), this.plugin.getEverAPI().getMessages().getText("RELOAD_DESCRIPTION")));
+			commands.put("eco reload", new ESubCommand(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
 		}
 		if(source.hasPermission(EEPermissions.GIVE.get())) {
 			commands.put("eco give", new ESubCommand(this.helpGive(source), this.descriptionGive(source)));
@@ -411,8 +412,8 @@ public class EECommand extends ECommand<EverEconomy> {
 				resultat = true;
 				// La source et le joueur sont différent
 				if(!user.getIdentifier().equals(staff.getIdentifier())){
-					staff.sendMessage(ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-								.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("RESET_OTHERS_STAFF"))
+					staff.sendMessage(ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+								.append(this.plugin.getService().replace(EEMessages.RESET_OTHERS_STAFF.get())
 										.replaceAll("<player>", user.getName())
 										.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 								.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
@@ -420,8 +421,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					Optional<Player> player = user.getPlayer();
 					if(player.isPresent()) {
 						player.get().sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("RESET_OTHERS_PLAYER"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.RESET_OTHERS_PLAYER.get())
 											.replaceAll("<staff>", staff.getName())
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
@@ -430,19 +431,19 @@ public class EECommand extends ECommand<EverEconomy> {
 				// La source et le joueur sont identique
 				} else {
 					staff.sendMessage(
-							ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-								.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("RESET_PLAYER"))
+							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+								.append(this.plugin.getService().replace(EEMessages.RESET_PLAYER.get())
 										.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 								.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
 								.build());
 				}
 			// Impossible de reset
 			} else {
-				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
+				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR.get()));
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
 		}
 		return resultat;
 	}
@@ -466,8 +467,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont différent
 					if(!user.getIdentifier().equals(staff.getIdentifier())) {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_OTHERS_STAFF"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.GIVE_OTHERS_STAFF.get())
 											.replaceAll("<player>", user.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
@@ -478,8 +479,8 @@ public class EECommand extends ECommand<EverEconomy> {
 						Optional<Player> player = user.getPlayer();
 						if(player.isPresent()) {
 							player.get().sendMessage(
-									ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-										.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_OTHERS_PLAYER"))
+									ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+										.append(this.plugin.getService().replace(EEMessages.GIVE_OTHERS_PLAYER.get())
 												.replaceAll("<staff>", staff.getName())
 												.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 												.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
@@ -490,8 +491,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont identique
 					} else {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_PLAYER"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.GIVE_PLAYER.get())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
@@ -503,8 +504,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont différent
 					if(!user.getIdentifier().equals(staff.getIdentifier())) {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_ERROR_MAX"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.GIVE_ERROR_MAX.get())
 											.replaceAll("<player>", user.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
@@ -514,8 +515,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont identique
 					} else {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("GIVE_ERROR_MAX_EQUALS"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.GIVE_ERROR_MAX_EQUALS.get())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
@@ -523,15 +524,15 @@ public class EECommand extends ECommand<EverEconomy> {
 									.build());
 					}
 				} else {
-					staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+					staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get()));
 				}
 			// Nombre invalide
 			} catch(NumberFormatException e) {
-				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get()));
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
 		}
 		return resultat;
 	}
@@ -555,8 +556,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont différent
 					if(!user.getIdentifier().equals(staff.getIdentifier())) {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_OTHERS_STAFF"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.TAKE_OTHERS_STAFF.get())
 											.replaceAll("<player>", user.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
@@ -566,8 +567,8 @@ public class EECommand extends ECommand<EverEconomy> {
 						Optional<Player> player = user.getPlayer();
 						if(player.isPresent()) {
 							player.get().sendMessage(
-									ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-										.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_OTHERS_PLAYER"))
+									ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+										.append(this.plugin.getService().replace(EEMessages.TAKE_OTHERS_PLAYER.get())
 												.replaceAll("<staff>", staff.getName())
 												.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 												.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
@@ -577,8 +578,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont identique
 					} else {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_PLAYER"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.TAKE_PLAYER.get())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
@@ -590,8 +591,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont différent
 					if(!user.getIdentifier().equals(staff.getIdentifier())) {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_ERROR_MIN"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.TAKE_ERROR_MIN.get())
 											.replaceAll("<player>", user.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
@@ -601,8 +602,8 @@ public class EECommand extends ECommand<EverEconomy> {
 					// La source et le joueur sont identique
 					} else {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("TAKE_ERROR_MIN_EQUALS"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.TAKE_ERROR_MIN_EQUALS.get())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
@@ -610,15 +611,15 @@ public class EECommand extends ECommand<EverEconomy> {
 									.build());
 					}
 				} else {
-					staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+					staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get()));
 				}
 			// Nombre invalide
 			} catch(NumberFormatException e) {
-				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get()));
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
 		}
 		return resultat;
 	}
@@ -627,16 +628,16 @@ public class EECommand extends ECommand<EverEconomy> {
 		List<Text> lists = new ArrayList<Text>();
 		
 		for(ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
-			lists.add(log.replace(this.plugin.getMessages().getMessage("LOG_LINE_TRANSACTION"),
-									this.plugin.getMessages().getMessage("LOG_LINE_TRANSFERT")));
+			lists.add(log.replace(EEMessages.LOG_LINE_TRANSACTION.get(),
+									EEMessages.LOG_LINE_TRANSFERT.get()));
 		}
 		
 		if(lists.isEmpty()) {
-			lists.add(this.plugin.getMessages().getText("LOG_EMPTY"));
+			lists.add(EEMessages.LOG_EMPTY.getText());
 		}
 		
 		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(EChat.of(this.plugin.getService().replace(
-				this.plugin.getMessages().getMessage("LOG_TITLE")
+				EEMessages.LOG_TITLE.get()
 					.replaceAll("<player>", user.getName()))), 
 				lists, player);
 	}
@@ -646,9 +647,9 @@ public class EECommand extends ECommand<EverEconomy> {
 		
 		if(logs.isEmpty()) {
 			if(player.getIdentifier().equals(user.getIdentifier())) {
-				player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT_EMPTY_EQUALS"))));
+				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + this.plugin.getService().replace(EEMessages.LOG_PRINT_EMPTY_EQUALS.get())));
 			} else {
-				player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT_EMPTY"))));
+				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + this.plugin.getService().replace(EEMessages.LOG_PRINT_EMPTY.get())));
 			}
 		} else {
 			File file = this.plugin.getPath().resolve("logs/" + user.getName() + ".log").toFile();
@@ -660,27 +661,27 @@ public class EECommand extends ECommand<EverEconomy> {
 			try {
 				write = new FileWriter(file);
 				for(ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
-					write.write(log.replace(this.plugin.getMessages().getMessage("LOG_PRINT_LINE_TRANSACTION"),
-											this.plugin.getMessages().getMessage("LOG_PRINT_LINE_TRANSFERT")).toPlain() + "\n");
+					write.write(log.replace(EEMessages.LOG_PRINT_LINE_TRANSACTION.get(),
+											EEMessages.LOG_PRINT_LINE_TRANSFERT.get()).toPlain() + "\n");
 				}
 				
 				if(player.getIdentifier().equals(user.getIdentifier())) {
 					player.sendMessage(
-							ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-								.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT"))
+							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+								.append(this.plugin.getService().replace(EEMessages.LOG_PRINT.get())
 										.replaceAll("<player>", user.getName())
 										.replaceAll("<file>", file.getName()))
 								.build());
 				} else {
 					player.sendMessage(
-							ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-								.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("LOG_PRINT_EQUALS"))
+							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+								.append(this.plugin.getService().replace(EEMessages.LOG_PRINT_EQUALS.get())
 										.replaceAll("<player>", user.getName())
 										.replaceAll("<file>", file.getName()))
 								.build());
 				}
 			} catch (IOException e) {
-				player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
+				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR.get()));
 			} finally {
 				try {if(write != null) write.close();} catch (IOException e) {}
 			}

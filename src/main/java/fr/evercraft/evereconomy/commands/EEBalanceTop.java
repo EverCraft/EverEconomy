@@ -30,9 +30,11 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
@@ -48,7 +50,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_TOP_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.BALANCE_TOP_DESCRIPTION.get()));
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -90,7 +92,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
 				if(user.isPresent()){
-					lists.add(ETextBuilder.toBuilder(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_TOP_LINE"))
+					lists.add(ETextBuilder.toBuilder(this.plugin.getService().replace(EEMessages.BALANCE_TOP_LINE.get())
 									.replaceAll("<player>", user.get().getName())
 									.replaceAll("<number>", cpt.toString())
 									.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(player.getValue())))
@@ -101,13 +103,13 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 			}
 			
 			if(lists.isEmpty()) {
-				lists.add(this.plugin.getMessages().getText("BALANCE_TOP_EMPTY"));
+				lists.add(EEMessages.BALANCE_TOP_EMPTY.getText());
 			}
 			
-			this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(this.plugin.getMessages().getText("BALANCE_TOP_TITLE"), lists, staff);
+			this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(EEMessages.BALANCE_TOP_TITLE.getText(), lists, staff);
 		// Le service d'économie n'est pas EverEconomy
 		} else {
-			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR")));
+			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR.get()));
 		}
 		return resultat;
 	}

@@ -34,6 +34,7 @@ import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
 
@@ -48,7 +49,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.BALANCE_DESCRIPTION.get()));
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -62,7 +63,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	public Text help(final CommandSource source) {
 		Text help;
 		if(source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
-			help = Text.builder("/balance [" + this.plugin.getEverAPI().getMessages().getArg("player") + "]")
+			help = Text.builder("/balance [" + EAMessages.ARGS_PLAYER.get() + "]")
 					.onClick(TextActions.suggestCommand("/balance "))
 					.color(TextColors.RED)
 					.build();
@@ -86,7 +87,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				resultat = executeBalance((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
-				source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR_FOR_PLAYER")));
+				source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR_FOR_PLAYER.get()));
 			}
 			
 		// Si on connait le joueur
@@ -99,7 +100,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 					resultat = executeBalanceOthers(source, user.get());
 				// Le joueur est introuvable
 				} else {
-					source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("PLAYER_NOT_FOUND")));
+					source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
 				}
 			// Il n'a pas la permission
 			} else {
@@ -115,8 +116,8 @@ public class EEBalance extends ECommand<EverEconomy> {
 	public boolean executeBalance(final EPlayer player) {
 		BigDecimal balance = player.getBalance();
 		player.sendMessage(
-				ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-					.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_PLAYER"))
+				ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+					.append(this.plugin.getService().replace(EEMessages.BALANCE_PLAYER.get())
 							.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 					.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
 					.build());
@@ -134,8 +135,8 @@ public class EEBalance extends ECommand<EverEconomy> {
 			if(account.isPresent()) {
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				staff.sendMessage(
-						ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-							.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("BALANCE_OTHERS"))
+						ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+							.append(this.plugin.getService().replace(EEMessages.BALANCE_OTHERS.get())
 									.replaceAll("<player>", user.getName())
 									.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
 							.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
@@ -143,7 +144,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				resultat = true;
 			// Le compte est introuvable
 			} else {
-				staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
 			}
 		// La source et le joueur sont identique
 		} else {

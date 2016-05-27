@@ -31,10 +31,10 @@ import fr.evercraft.everapi.plugin.file.EnumMessage;
 public class EEMessage extends EMessage {
 
 	public EEMessage(EverEconomy plugin) {
-		super(plugin);
+		super(plugin, EEMessages.values());
 	}
 
-	public enum ECMessages implements EnumMessage {
+	public enum EEMessages implements EnumMessage {
 		PREFIX("prefix", 									"[&4Ever&6&lEconomy&f] "),
 		
 		DESCRIPTION("description", 							"Gestion de l'Economie"),
@@ -123,11 +123,11 @@ public class EEMessage extends EMessage {
 	    private final Object english;
 	    private Object message;
 	    
-	    private ECMessages(final String path, final Object french) {   	
+	    private EEMessages(final String path, final Object french) {   	
 	    	this(path, french, french);
 	    }
 	    
-	    private ECMessages(final String path, final Object french, final Object english) {
+	    private EEMessages(final String path, final Object french, final Object english) {
 	    	Preconditions.checkNotNull(french, "Le message '" + this.name() + "' n'est pas définit");
 	    	
 	    	this.path = path;	    	
@@ -178,13 +178,5 @@ public class EEMessage extends EMessage {
 		public TextColor getColor() {
 			return EChat.getTextColor(this.get());
 		}
-	}
-	
-	@Override
-	public void loadDefault() {
-	}
-
-	@Override
-	public void loadConfig() {
 	}
 }

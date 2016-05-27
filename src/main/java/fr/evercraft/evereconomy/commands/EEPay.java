@@ -29,11 +29,13 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
 
@@ -48,7 +50,7 @@ public class EEPay extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_DESCRIPTION")));
+		return EChat.of(this.plugin.getService().replace(EEMessages.PAY_DESCRIPTION.get()));
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -62,8 +64,8 @@ public class EEPay extends ECommand<EverEconomy> {
 	}
 
 	public Text help(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " <" + this.plugin.getEverAPI().getMessages().getArg("player") + "> "
-												  + "<" + this.plugin.getEverAPI().getMessages().getArg("amount") + ">")
+		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.get() + "> "
+												  + "<" + EAMessages.ARGS_AMOUNT.get() + ">")
 					.onClick(TextActions.suggestCommand("/" + this.getName()))
 					.color(TextColors.RED)
 					.build();
@@ -82,10 +84,10 @@ public class EEPay extends ECommand<EverEconomy> {
 					resultat = executePay((EPlayer) source, optPlayer.get(), args.get(1));
 				// Le joueur destination est introuvable
 				} else {
-					source.sendMessage(this.plugin.getMessages().getText("PREFIX").concat(this.plugin.getEverAPI().getMessages().getText("PLAYER_NOT_FOUND")));
+					source.sendMessage(EEMessages.PREFIX.getText().concat(EAMessages.PLAYER_NOT_FOUND.getText()));
 				}
 			} else {
-				source.sendMessage(this.plugin.getMessages().getText("PREFIX").concat(this.plugin.getEverAPI().getMessages().getText("COMMAND_ERROR_FOR_PLAYER")));
+				source.sendMessage(EEMessages.PREFIX.getText().concat(EAMessages.COMMAND_ERROR_FOR_PLAYER.getText()));
 			}
 		// Nombre d'argument incorrect
 		} else {
@@ -114,8 +116,8 @@ public class EEPay extends ECommand<EverEconomy> {
 					// Transfert réussit
 					if(result.equals(ResultType.SUCCESS)) {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_STAFF"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.PAY_STAFF.get())
 											.replaceAll("<player>", player.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(staff_balance)))
@@ -123,8 +125,8 @@ public class EEPay extends ECommand<EverEconomy> {
 									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(staff_balance))
 									.build());
 						player.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_PLAYER"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+									.append(this.plugin.getService().replace(EEMessages.PAY_PLAYER.get())
 											.replaceAll("<staff>", staff.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(player_balance)))
@@ -134,8 +136,8 @@ public class EEPay extends ECommand<EverEconomy> {
 					// Transfert erreur
 					} else if(result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_ERROR_MIN"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.getText())
+									.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_MIN.get())
 											.replaceAll("<player>", player.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(staff_balance)))
@@ -144,8 +146,8 @@ public class EEPay extends ECommand<EverEconomy> {
 									.build());
 					} else if(result.equals(ResultType.ACCOUNT_NO_SPACE)) {
 						staff.sendMessage(
-								ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-									.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_ERROR_MAX"))
+								ETextBuilder.toBuilder(EEMessages.PREFIX.getText())
+									.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_MAX.get())
 											.replaceAll("<staff>", staff.getName())
 											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
 											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(staff_balance)))
@@ -153,24 +155,24 @@ public class EEPay extends ECommand<EverEconomy> {
 									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(staff_balance))
 									.build());
 					} else {
-						staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID")));
+						staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get()));
 					}
 				// La source et le joueur sont identique
 				} else {
 					staff.sendMessage(
-							ETextBuilder.toBuilder(this.plugin.getMessages().getMessage("PREFIX"))
-								.append(this.plugin.getService().replace(this.plugin.getMessages().getMessage("PAY_ERROR_EQUALS"))
+							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
+								.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_EQUALS.get())
 										.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount)))
 								.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
 								.build());
 				}
 			// Nombre invalide
 			} catch(NumberFormatException e) {
-				staff.sendMessage(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("NUMBER_INVALID"));
+				staff.sendMessage(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get());
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("ACCOUNT_NOT_FOUND")));
+			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
 		}
 		return resultat;
 	}
