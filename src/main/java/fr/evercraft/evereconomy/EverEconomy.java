@@ -27,13 +27,13 @@ import fr.evercraft.evereconomy.service.economy.EEconomyService;
 
 @Plugin(id = "fr.evercraft.evereconomy", 
 		name = "EverEconomy", 
-		version = "1.1", 
+		version = "1.2", 
 		description = "Management of the economy",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut","lesbleu"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.1"),
-		    @Dependency(id = "fr.evercraft.everchat", optional = true)
+		    @Dependency(id = "fr.evercraft.everapi", version = "1.2"),
+		    @Dependency(id = "fr.evercraft.everchat", version = "1.2", optional = true)
 		})
 public class EverEconomy extends EPlugin {
 
