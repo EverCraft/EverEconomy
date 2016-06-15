@@ -28,6 +28,7 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.transaction.TransactionType;
 
+import fr.evercraft.everapi.exception.PluginDisableException;
 import fr.evercraft.everapi.exception.ServerDisableException;
 import fr.evercraft.everapi.plugin.EDataBase;
 import fr.evercraft.evereconomy.service.economy.ELog;
@@ -36,7 +37,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 	private String table_account;
 	private String table_log;
 
-	public EEDataBase(EverEconomy plugin) {
+	public EEDataBase(EverEconomy plugin) throws PluginDisableException {
 		super(plugin, true);
 	}
 

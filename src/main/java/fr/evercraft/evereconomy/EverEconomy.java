@@ -51,9 +51,6 @@ public class EverEconomy extends EPlugin {
 		
 		// MySQL
 		this.databases = new EEDataBase(this);
-		if(!this.databases.isEnable()) {
-			throw new PluginDisableException("This plugin requires a database");
-		}
 		
 		// Economy
 		this.service = new EEconomyService(this);
@@ -80,10 +77,7 @@ public class EverEconomy extends EPlugin {
 		// Configurations
 		this.reloadConfigurations();
 		this.databases.reload();
-		if(!this.databases.isEnable()) {
-			throw new PluginDisableException("This plugin requires a database");
-		}
-		
+
 		// Economy
 		this.service.reload();
 		
