@@ -22,7 +22,7 @@ import org.spongepowered.api.service.economy.EconomyService;
 
 import fr.evercraft.everapi.exception.PluginDisableException;
 import fr.evercraft.everapi.plugin.EPlugin;
-import fr.evercraft.everapi.services.economy.TopEconomyService;
+import fr.evercraft.everapi.services.TopEconomyService;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
 
 @Plugin(id = "fr.evercraft.evereconomy", 
