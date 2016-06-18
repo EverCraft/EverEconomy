@@ -23,6 +23,14 @@ import org.spongepowered.api.service.economy.EconomyService;
 import fr.evercraft.everapi.exception.PluginDisableException;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.TopEconomyService;
+import fr.evercraft.evereconomy.command.EEBalance;
+import fr.evercraft.evereconomy.command.EEBalanceTop;
+import fr.evercraft.evereconomy.command.EEPay;
+import fr.evercraft.evereconomy.command.sub.EEGive;
+import fr.evercraft.evereconomy.command.sub.EELog;
+import fr.evercraft.evereconomy.command.sub.EEReload;
+import fr.evercraft.evereconomy.command.sub.EEReset;
+import fr.evercraft.evereconomy.command.sub.EETake;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
 
 @Plugin(id = "fr.evercraft.evereconomy", 
@@ -66,7 +74,17 @@ public class EverEconomy extends EPlugin {
 		}
 		
 		// Commands
-		new EECommand(this);
+		EECommand command = new EECommand(this);
+		
+		command.add(new EEBalance(this));
+		command.add(new EEBalanceTop(this));
+		command.add(new EEPay(this));
+		
+		command.add(new EEReload(this, command));
+		command.add(new EEGive(this, command));
+		command.add(new EETake(this, command));
+		command.add(new EEReset(this, command));
+		command.add(new EELog(this, command));
 		
 		// Listerners
 		this.getGame().getEventManager().registerListeners(this, new EEListener(this));

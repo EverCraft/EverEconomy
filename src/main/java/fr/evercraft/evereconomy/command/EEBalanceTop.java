@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverEconomy.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.evereconomy.commands;
+package fr.evercraft.evereconomy.command;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
+import fr.evercraft.everapi.command.ECommand;
 import fr.evercraft.everapi.plugin.EChat;
-import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
