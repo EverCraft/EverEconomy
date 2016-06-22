@@ -18,8 +18,9 @@ package fr.evercraft.evereconomy;
 
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
-import fr.evercraft.everapi.command.EParentCommand;
+
 import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.plugin.command.EParentCommand;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 
 public class EECommand extends EParentCommand<EverEconomy> {

@@ -33,8 +33,8 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.sponge.UtilsCause;
-import fr.evercraft.everapi.command.ESubCommand;
 import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.plugin.command.ESubCommand;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EECommand;
 import fr.evercraft.evereconomy.EEPermissions;
