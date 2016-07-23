@@ -17,6 +17,9 @@
 package fr.evercraft.evereconomy.service.economy;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
@@ -109,7 +112,11 @@ public class ECurrency implements Currency {
 	}
 	
 	public String cast(BigDecimal amount) {
-		return amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString();
+		amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP);
+		DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.FRANCE);
+		dfs.setGroupingSeparator(' ');
+		DecimalFormat decimalPrintFormat = new DecimalFormat("#,##0.0####", dfs);
+		return decimalPrintFormat.format(amount);
 	}
 
 	@Override
