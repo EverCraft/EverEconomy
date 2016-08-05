@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
 
+import fr.evercraft.everapi.java.UtilsDouble;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -113,10 +114,7 @@ public class ECurrency implements Currency {
 	
 	public String cast(BigDecimal amount) {
 		amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP);
-		DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.FRANCE);
-		dfs.setGroupingSeparator(' ');
-		DecimalFormat decimalPrintFormat = new DecimalFormat("#,##0.0####", dfs);
-		return decimalPrintFormat.format(amount);
+		return UtilsDouble.getString(amount);
 	}
 
 	@Override
