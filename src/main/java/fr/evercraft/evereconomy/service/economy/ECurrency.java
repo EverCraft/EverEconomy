@@ -17,9 +17,6 @@
 package fr.evercraft.evereconomy.service.economy;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
