@@ -32,6 +32,7 @@ import fr.evercraft.evereconomy.command.sub.EEReload;
 import fr.evercraft.evereconomy.command.sub.EEReset;
 import fr.evercraft.evereconomy.command.sub.EETake;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
+import fr.evercraft.evereconomy.sign.BalanceSign;
 
 @Plugin(id = "fr.evercraft.evereconomy", 
 		name = "EverEconomy", 
@@ -88,6 +89,10 @@ public class EverEconomy extends EPlugin {
 		
 		// Listerners
 		this.getGame().getEventManager().registerListeners(this, new EEListener(this));
+		
+		if(this.getEverAPI().getManagerService().getSign().isPresent()) {
+			this.getEverAPI().getManagerService().getSign().get().add(new BalanceSign(this));
+		}
 	}
 	
 	@Override
