@@ -116,7 +116,11 @@ public class EEMessage extends EMessage {
 		LOG_PRINT_EMPTY("log.printEmpty", 					"&6<player> &7n'a fait aucune transaction.", 
 															"&6<player> &7hasn't traded"),
 		LOG_PRINT_EMPTY_EQUALS("log.printEmptyEquals", 		"&7Vous n'avez effectué aucune transaction.", 
-															"&7You haven't made any transaction.");
+															"&7You haven't made any transaction."),
+		
+		SIGN_BALANCE_CREATE("sign.balance.create",		"&7Le panneau a été créé avec succès."),
+		SIGN_BALANCE_DISABLE("sign.balance.disable",    "&cCe panneau est désactivé."),
+		SIGN_BALANCE_BREAK("sign.balance.break",		"&7Le panneau a été supprimé.");
 		
 		private final String path;
 	    private final Object french;
