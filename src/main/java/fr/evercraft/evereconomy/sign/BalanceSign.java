@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.spongepowered.api.block.tileentity.Sign;
+import org.spongepowered.api.data.manipulator.mutable.tileentity.SignData;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -46,7 +47,7 @@ public class BalanceSign implements SignSubject {
 	}
 
 	@Override
-	public boolean create(EPlayer player, Sign sign) {
+	public boolean create(EPlayer player, Location<World> location, SignData data) {
 		player.sendMessage(EEMessages.PREFIX.getText().concat(EEMessages.SIGN_BALANCE_CREATE.getText()));
 		return true;
 	}
