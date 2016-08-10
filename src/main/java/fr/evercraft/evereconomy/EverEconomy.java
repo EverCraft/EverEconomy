@@ -70,7 +70,7 @@ public class EverEconomy extends EPlugin {
 	@Override
 	protected void onCompleteEnable() throws PluginDisableException {
 		// Economy
-		if(!this.getEverAPI().getManagerService().getEconomy().isPresent()){
+		if(!this.getEverAPI().getManagerService().getEconomy().isPresent()) {
 			throw new PluginDisableException("Il n'y a pas de système d'économie !");
 		}
 		
