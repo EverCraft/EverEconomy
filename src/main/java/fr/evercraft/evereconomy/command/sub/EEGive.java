@@ -171,7 +171,8 @@ public class EEGive extends ESubCommand<EverEconomy> {
 				}
 			// Nombre invalide
 			} catch(NumberFormatException e) {
-				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get()));
+				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.IS_NOT_NUMBER.get()
+						.replaceAll("<number>", amount_name)));
 			}
 		// Le compte est introuvable
 		} else {
