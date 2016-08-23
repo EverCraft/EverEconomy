@@ -56,7 +56,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 	
 	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
-		if(args.size() == 1){
+		if (args.size() == 1){
 			suggests = null;
 		}
 		return suggests;
@@ -73,10 +73,10 @@ public class EEReset extends ESubCommand<EverEconomy> {
 		// Résultat de la commande :
 		boolean resultat = false;
 		
-		if(args.size() == 1) {
+		if (args.size() == 1) {
 			Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
 			// Le joueur existe
-			if(user.isPresent()){
+			if (user.isPresent()){
 				resultat = commandReset(source, user.get());
 			// Le joueur est introuvable
 			} else {
@@ -93,13 +93,13 @@ public class EEReset extends ESubCommand<EverEconomy> {
 		
 		Optional<UniqueAccount> account = this.plugin.getService().getOrCreateAccount(user.getUniqueId());
 		// Le compte existe
-		if(account.isPresent()) {
+		if (account.isPresent()) {
 			// Reset
-			if(account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), UtilsCause.command(this.plugin, staff)).getResult().equals(ResultType.SUCCESS)){
+			if (account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), UtilsCause.command(this.plugin, staff)).getResult().equals(ResultType.SUCCESS)){
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				resultat = true;
 				// La source et le joueur sont différent
-				if(!user.getIdentifier().equals(staff.getIdentifier())){
+				if (!user.getIdentifier().equals(staff.getIdentifier())){
 					staff.sendMessage(ETextBuilder.toBuilder(EEMessages.PREFIX.get())
 								.append(this.plugin.getService().replace(EEMessages.RESET_OTHERS_STAFF.get())
 										.replaceAll("<player>", user.getName())
@@ -107,7 +107,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 								.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
 								.build());
 					Optional<Player> player = user.getPlayer();
-					if(player.isPresent()) {
+					if (player.isPresent()) {
 						player.get().sendMessage(
 								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
 									.append(this.plugin.getService().replace(EEMessages.RESET_OTHERS_PLAYER.get())

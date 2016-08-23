@@ -96,10 +96,10 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		this.currency.reload();
 		
 		this.cache.cleanUp();
-		for(EUniqueAccount account : this.players.values()) {
+		for (EUniqueAccount account : this.players.values()) {
 			account.reload();
 		}
-		for(EVirtualAccount account : this.virtuals.values()) {
+		for (EVirtualAccount account : this.virtuals.values()) {
 			account.reload();
 		}
 	}
@@ -130,7 +130,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		Preconditions.checkNotNull(uuid, "uuid");
 		
 		try {
-			if(!this.players.containsKey(uuid)) {
+			if (!this.players.containsKey(uuid)) {
 				return Optional.of(this.cache.get(uuid));
 	    	}
 	    	return Optional.of(this.players.get(uuid));
@@ -144,7 +144,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 	public Optional<Account> getOrCreateAccount(final String identifier) {
 		Preconditions.checkNotNull(identifier, "identifier");
 		
-		if(!this.virtuals.containsKey(identifier)){
+		if (!this.virtuals.containsKey(identifier)){
 			this.virtuals.put(identifier, new EVirtualAccount(this.plugin, identifier));
 		}
 		return Optional.ofNullable(this.virtuals.get(identifier));
@@ -173,7 +173,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		
 		EUniqueAccount player = this.cache.getIfPresent(uuid);
 		// Si le joueur est dans le cache
-		if(player != null) {
+		if (player != null) {
 			this.players.putIfAbsent(uuid, player);
 			this.plugin.getLogger().debug("Loading player cache : " + uuid.toString());
 		// Si le joueur n'est pas dans le cache
@@ -194,7 +194,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		
 		EUniqueAccount player = this.players.remove(uuid);
 		// Si le joueur existe
-		if(player != null) {
+		if (player != null) {
 			this.cache.put(uuid, player);
 			this.plugin.getLogger().debug("Unloading the player : " + uuid.toString());
 		}

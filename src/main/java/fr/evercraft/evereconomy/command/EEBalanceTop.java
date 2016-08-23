@@ -69,7 +69,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 		boolean resultat = false;
 		
 		// Nombre d'argument correct
-		if(args.size() == 0) {
+		if (args.size() == 0) {
 			this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.commandBalanceTop(staff))
 				.name("commandBalanceTop").submit(this.plugin);
 			resultat = true;
@@ -85,13 +85,13 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 		boolean resultat = false; 
 		
 		// Si le service d'économie est bien EverEconomy
-		if(this.plugin.getService() instanceof EEconomyService) {
+		if (this.plugin.getService() instanceof EEconomyService) {
 			List<Text> lists = new ArrayList<Text>();
 			Integer cpt = 1;
-			for(Entry<UUID, BigDecimal> player : this.plugin.getService().topUniqueAccount(30).entrySet()) {
+			for (Entry<UUID, BigDecimal> player : this.plugin.getService().topUniqueAccount(30).entrySet()) {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
-				if(user.isPresent()){
+				if (user.isPresent()){
 					lists.add(ETextBuilder.toBuilder(this.plugin.getService().replace(EEMessages.BALANCE_TOP_LINE.get())
 									.replaceAll("<player>", user.get().getName())
 									.replaceAll("<number>", cpt.toString())
@@ -102,7 +102,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 				}
 			}
 			
-			if(lists.isEmpty()) {
+			if (lists.isEmpty()) {
 				lists.add(EEMessages.BALANCE_TOP_EMPTY.getText());
 			}
 			

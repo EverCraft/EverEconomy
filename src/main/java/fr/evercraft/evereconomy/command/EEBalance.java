@@ -54,7 +54,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
-		if(args.size() == 1 && source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
+		if (args.size() == 1 && source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
 			suggests = null;
 		}
 		return suggests;
@@ -62,7 +62,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 
 	public Text help(final CommandSource source) {
 		Text help;
-		if(source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
+		if (source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
 			help = Text.builder("/balance [" + EAMessages.ARGS_PLAYER.get() + "]")
 					.onClick(TextActions.suggestCommand("/balance "))
 					.color(TextColors.RED)
@@ -81,9 +81,9 @@ public class EEBalance extends ECommand<EverEconomy> {
 		boolean resultat = false;
 		
 		// Si ne connais pas le joueur
-		if(args.size() == 0) {
+		if (args.size() == 0) {
 			// Si la source est bien un joueur
-			if(source instanceof EPlayer) {
+			if (source instanceof EPlayer) {
 				resultat = executeBalance((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
@@ -91,12 +91,12 @@ public class EEBalance extends ECommand<EverEconomy> {
 			}
 			
 		// Si on connait le joueur
-		} else if(args.size() == 1) {
+		} else if (args.size() == 1) {
 			// Si il a la permission
-			if(source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
+			if (source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
 				Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 				// Le joueur existe
-				if(user.isPresent()) {
+				if (user.isPresent()) {
 					resultat = executeBalanceOthers(source, user.get());
 				// Le joueur est introuvable
 				} else {
@@ -129,10 +129,10 @@ public class EEBalance extends ECommand<EverEconomy> {
 		boolean resultat = false;
 		
 		// La source et le joueur sont différent
-		if(!user.getIdentifier().equals(staff.getIdentifier()) || !(staff instanceof EPlayer)){
+		if (!user.getIdentifier().equals(staff.getIdentifier()) || !(staff instanceof EPlayer)){
 			Optional<UniqueAccount> account = this.plugin.getService().getOrCreateAccount(user.getUniqueId());
 			// Le compte existe
-			if(account.isPresent()) {
+			if (account.isPresent()) {
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				staff.sendMessage(
 						ETextBuilder.toBuilder(EEMessages.PREFIX.get())

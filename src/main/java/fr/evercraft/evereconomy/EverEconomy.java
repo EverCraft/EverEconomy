@@ -70,7 +70,7 @@ public class EverEconomy extends EPlugin {
 	@Override
 	protected void onCompleteEnable() throws PluginDisableException {
 		// Economy
-		if(!this.getEverAPI().getManagerService().getEconomy().isPresent()) {
+		if (!this.getEverAPI().getManagerService().getEconomy().isPresent()) {
 			throw new PluginDisableException("Il n'y a pas de système d'économie !");
 		}
 		
@@ -90,7 +90,7 @@ public class EverEconomy extends EPlugin {
 		// Listerners
 		this.getGame().getEventManager().registerListeners(this, new EEListener(this));
 		
-		if(this.getEverAPI().getManagerService().getSign().isPresent()) {
+		if (this.getEverAPI().getManagerService().getSign().isPresent()) {
 			this.getEverAPI().getManagerService().getSign().get().add(new BalanceSign(this));
 		}
 	}
@@ -104,7 +104,7 @@ public class EverEconomy extends EPlugin {
 		// Economy
 		this.service.reload();
 		
-		if(!this.getEverAPI().getManagerService().getEconomy().isPresent()){
+		if (!this.getEverAPI().getManagerService().getEconomy().isPresent()){
 			throw new PluginDisableException("Il n'y a pas de système d'économie !");
 		}
 	}

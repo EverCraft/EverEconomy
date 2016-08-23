@@ -100,14 +100,14 @@ public abstract class EAccount implements Account {
 
 	@Override
 	public BigDecimal getBalance(final Currency currency, final Set<Context> contexts) {
-		if(this.currencies.containsKey(currency)){
+		if (this.currencies.containsKey(currency)){
 			return this.currencies.get(currency);
 		}
 		return getDefaultBalance(currency);
 	}
 	
 	public void setBalance(final Currency currency, final BigDecimal amount) {
-		if(!this.currencies.containsKey(currency)){
+		if (!this.currencies.containsKey(currency)){
 			this.currencies.put(currency, amount);
 			this.plugin.getThreadAsync().execute(() -> this.insert(currency));
 		}
@@ -133,7 +133,7 @@ public abstract class EAccount implements Account {
 		BigDecimal amount = before.subtract(after);
 		
 		// Si le changement est supérieur ou égal à 0 c'est que l'on dépose de l'argent
-		if(amount.compareTo(BigDecimal.ZERO) >= 0) {
+		if (amount.compareTo(BigDecimal.ZERO) >= 0) {
 			transaction = TransactionTypes.DEPOSIT;
 		}
 		
@@ -148,7 +148,7 @@ public abstract class EAccount implements Account {
 	public Map<Currency, TransactionResult> resetBalances(final Cause cause, final Set<Context> contexts) {		
 		Map<Currency, TransactionResult> list = new HashMap<Currency, TransactionResult>();
 		// Pour tous les monnaies
-		for(Currency currency : this.currencies.keySet()){
+		for (Currency currency : this.currencies.keySet()){
 			TransactionType transaction = TransactionTypes.WITHDRAW;
 			
 			BigDecimal before = this.getBalance(currency);
@@ -156,7 +156,7 @@ public abstract class EAccount implements Account {
 			BigDecimal amount = before.subtract(after);
 
 			// Si le changement est supérieur ou égal à 0 c'est que l'on dépose de l'argent
-			if(amount.compareTo(BigDecimal.ZERO) >= 0) {
+			if (amount.compareTo(BigDecimal.ZERO) >= 0) {
 				transaction = TransactionTypes.DEPOSIT;
 			}
 			
@@ -179,7 +179,7 @@ public abstract class EAccount implements Account {
 		BigDecimal amount = before.subtract(after);
 
 		// Si le changement est supérieur ou égal à 0 c'est que l'on dépose de l'argent
-		if(amount.compareTo(BigDecimal.ZERO) >= 0) {
+		if (amount.compareTo(BigDecimal.ZERO) >= 0) {
 			transaction = TransactionTypes.DEPOSIT;
 		}
 		
@@ -196,9 +196,9 @@ public abstract class EAccount implements Account {
 		BigDecimal after = before.add(amount);
 		
 		// Quantité positive
-		if(amount.compareTo(BigDecimal.ZERO) >= 0) {
+		if (amount.compareTo(BigDecimal.ZERO) >= 0) {
 			// Inférieur au max
-			if(after.compareTo(ECurrency.getBalanceMax(currency)) <= 0) {
+			if (after.compareTo(ECurrency.getBalanceMax(currency)) <= 0) {
 				// Transfére
 				this.setBalance(currency, after);
 				this.log(currency, before, after, TransactionTypes.DEPOSIT, cause);
@@ -215,9 +215,9 @@ public abstract class EAccount implements Account {
 		BigDecimal after = before.subtract(amount);
 		
 		// Quantité positive
-		if(amount.compareTo(BigDecimal.ZERO) >= 0) {
+		if (amount.compareTo(BigDecimal.ZERO) >= 0) {
 			// Séperieur au min
-			if(after.compareTo(ECurrency.getBalanceMin(currency)) >= 0) {
+			if (after.compareTo(ECurrency.getBalanceMin(currency)) >= 0) {
 				// Transfére
 				this.setBalance(currency, after);
 				this.log(currency, before, after, TransactionTypes.WITHDRAW, cause);
@@ -236,16 +236,16 @@ public abstract class EAccount implements Account {
 		BigDecimal player_after = player_before.subtract(amount);
 		
 		// Quantité positive
-		if(amount.compareTo(BigDecimal.ZERO) > 0) {
+		if (amount.compareTo(BigDecimal.ZERO) > 0) {
 			// Séperieur au min
-			if(player_after.compareTo(ECurrency.getBalanceMin(currency)) >= 0) {
+			if (player_after.compareTo(ECurrency.getBalanceMin(currency)) >= 0) {
 				// Transfére
 				BigDecimal to_before = to.getBalance(currency);
 				BigDecimal to_after = to_before.add(amount);
 				
 				// Inférieur au max
-				if(to_after.compareTo(ECurrency.getBalanceMax(currency)) <= 0) {
-					if(to instanceof EAccount) {
+				if (to_after.compareTo(ECurrency.getBalanceMax(currency)) <= 0) {
+					if (to instanceof EAccount) {
 						EAccount account = (EAccount) to;
 						this.setBalance(currency, player_after);
 						account.setBalance(currency, to_after);
@@ -254,7 +254,7 @@ public abstract class EAccount implements Account {
 						account.log(currency, to_before, to_after, TransactionTypes.TRANSFER, cause, this.getIdentifier());
 					} else {
 						result = this.deposit(currency, amount, cause, contexts).getResult();
-						if(result.equals(ResultType.SUCCESS)) {
+						if (result.equals(ResultType.SUCCESS)) {
 							this.setBalance(currency, player_after);
 							
 							this.log(currency, player_before, player_after, TransactionTypes.TRANSFER, cause);
@@ -290,7 +290,7 @@ public abstract class EAccount implements Account {
 			ResultSet list = preparedStatement.executeQuery();
 			while(list.next()) {
 				Optional<ECurrency> currency = this.plugin.getService().getCurrency(list.getString("currency"));
-				if(currency.isPresent()){
+				if (currency.isPresent()){
 					this.currencies.put(currency.get(), list.getBigDecimal("balance"));
 					this.plugin.getLogger().debug("Log : (identifier='" + identifier + "';"
 														+ "currency='" + currency.get().getId() + "';"
@@ -298,7 +298,7 @@ public abstract class EAccount implements Account {
 				}
 			}
 			for (Currency currency : this.plugin.getService().getCurrencies()) {
-				if(!this.currencies.containsKey(currency)) {
+				if (!this.currencies.containsKey(currency)) {
 					BigDecimal balance = getDefaultBalance(currency);
 					this.currencies.put(currency, balance);
 					this.insert(connection, currency);

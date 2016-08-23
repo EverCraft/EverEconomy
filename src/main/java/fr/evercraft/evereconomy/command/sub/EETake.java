@@ -56,9 +56,9 @@ public class EETake extends ESubCommand<EverEconomy> {
 	
 	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
-		if(args.size() == 1){
+		if (args.size() == 1){
 			suggests = null;
-		} else if(args.size() == 2){
+		} else if (args.size() == 2){
 			suggests.add("1");
 		}
 		return suggests;
@@ -76,10 +76,10 @@ public class EETake extends ESubCommand<EverEconomy> {
 		// Résultat de la commande :
 		boolean resultat = false;
 		
-		if(args.size() == 2) {
+		if (args.size() == 2) {
 			Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 			// Le joueur existe
-			if(user.isPresent()){
+			if (user.isPresent()){
 				resultat = commandTake(source, user.get(), args.get(1));
 			// Le joueur est introuvable
 			} else {
@@ -96,7 +96,7 @@ public class EETake extends ESubCommand<EverEconomy> {
 		
 		Optional<UniqueAccount> account = this.plugin.getService().getOrCreateAccount(user.getUniqueId());
 		// Le compte existe
-		if(account.isPresent()) {
+		if (account.isPresent()) {
 			// Nombre valide
 			try {
 				BigDecimal amount = new BigDecimal(Double.parseDouble(amount_name));
@@ -105,10 +105,10 @@ public class EETake extends ESubCommand<EverEconomy> {
 				ResultType result = account.get().withdraw(this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				// Le compte existe
-				if(result.equals(ResultType.SUCCESS)) {
+				if (result.equals(ResultType.SUCCESS)) {
 					resultat = true;
 					// La source et le joueur sont différent
-					if(!user.getIdentifier().equals(staff.getIdentifier())) {
+					if (!user.getIdentifier().equals(staff.getIdentifier())) {
 						staff.sendMessage(
 								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
 									.append(this.plugin.getService().replace(EEMessages.TAKE_OTHERS_STAFF.get())
@@ -119,7 +119,7 @@ public class EETake extends ESubCommand<EverEconomy> {
 									.build());
 						
 						Optional<Player> player = user.getPlayer();
-						if(player.isPresent()) {
+						if (player.isPresent()) {
 							player.get().sendMessage(
 									ETextBuilder.toBuilder(EEMessages.PREFIX.get())
 										.append(this.plugin.getService().replace(EEMessages.TAKE_OTHERS_PLAYER.get())
@@ -141,9 +141,9 @@ public class EETake extends ESubCommand<EverEconomy> {
 									.build());
 					}
 				// Min quantité
-				} else if(result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
+				} else if (result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
 					// La source et le joueur sont différent
-					if(!user.getIdentifier().equals(staff.getIdentifier())) {
+					if (!user.getIdentifier().equals(staff.getIdentifier())) {
 						staff.sendMessage(
 								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
 									.append(this.plugin.getService().replace(EEMessages.TAKE_ERROR_MIN.get())

@@ -55,7 +55,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 	
 	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
-		if(args.size() == 1){
+		if (args.size() == 1){
 			suggests = null;
 		}
 		return suggests;
@@ -72,10 +72,10 @@ public class EELog extends ESubCommand<EverEconomy> {
 		// Résultat de la commande :
 		boolean resultat = false;
 		
-		if(args.size() == 1) {
+		if (args.size() == 1) {
 			final Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 			// Le joueur existe
-			if(user.isPresent()){
+			if (user.isPresent()){
 				this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.commandLog(source, user.get()))
 					.name("commandLog").submit(this.plugin);
 				resultat = true;
@@ -83,12 +83,12 @@ public class EELog extends ESubCommand<EverEconomy> {
 			} else {
 				source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
 			}
-		} else if(args.size() == 2) {
+		} else if (args.size() == 2) {
 			// Si il a la permission
-			if(source.hasPermission(EEPermissions.LOG_PRINT.get())){
+			if (source.hasPermission(EEPermissions.LOG_PRINT.get())){
 				final Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 				// Le joueur existe
-				if(user.isPresent()){
+				if (user.isPresent()){
 					this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.commandLogPrint(source, user.get(), args.get(1)))
 						.name("commandLogPrint").submit(this.plugin);
 					resultat = true;
@@ -109,12 +109,12 @@ public class EELog extends ESubCommand<EverEconomy> {
 	private void commandLog(final CommandSource player, final User user) {
 		List<Text> lists = new ArrayList<Text>();
 		
-		for(ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
+		for (ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
 			lists.add(log.replace(EEMessages.LOG_LINE_TRANSACTION.get(),
 									EEMessages.LOG_LINE_TRANSFERT.get()));
 		}
 		
-		if(lists.isEmpty()) {
+		if (lists.isEmpty()) {
 			lists.add(EEMessages.LOG_EMPTY.getText());
 		}
 		
@@ -127,27 +127,27 @@ public class EELog extends ESubCommand<EverEconomy> {
 	private void commandLogPrint(final CommandSource player, final User user, final String string) {
 		List<ELog> logs = this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency());
 		
-		if(logs.isEmpty()) {
-			if(player.getIdentifier().equals(user.getIdentifier())) {
+		if (logs.isEmpty()) {
+			if (player.getIdentifier().equals(user.getIdentifier())) {
 				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + this.plugin.getService().replace(EEMessages.LOG_PRINT_EMPTY_EQUALS.get())));
 			} else {
 				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + this.plugin.getService().replace(EEMessages.LOG_PRINT_EMPTY.get())));
 			}
 		} else {
 			File file = this.plugin.getPath().resolve("logs/" + user.getName() + ".log").toFile();
-			if(!file.getParentFile().exists()){
+			if (!file.getParentFile().exists()){
 				file.getParentFile().mkdirs();
 			}
 			
 			FileWriter write = null;
 			try {
 				write = new FileWriter(file);
-				for(ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
+				for (ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
 					write.write(log.replace(EEMessages.LOG_PRINT_LINE_TRANSACTION.get(),
 											EEMessages.LOG_PRINT_LINE_TRANSFERT.get()).toPlain() + "\n");
 				}
 				
-				if(player.getIdentifier().equals(user.getIdentifier())) {
+				if (player.getIdentifier().equals(user.getIdentifier())) {
 					player.sendMessage(
 							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
 								.append(this.plugin.getService().replace(EEMessages.LOG_PRINT.get())
@@ -165,7 +165,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 			} catch (IOException e) {
 				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR.get()));
 			} finally {
-				try {if(write != null) write.close();} catch (IOException e) {}
+				try {if (write != null) write.close();} catch (IOException e) {}
 			}
 		}
 	}

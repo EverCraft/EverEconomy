@@ -55,7 +55,7 @@ public class EEPay extends ECommand<EverEconomy> {
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
-		if(args.size() == 1){
+		if (args.size() == 1){
 			suggests = null;
 		} else {
 			suggests.add("1");
@@ -76,11 +76,11 @@ public class EEPay extends ECommand<EverEconomy> {
 		boolean resultat = false;
 		
 		// On connait le joueur et le montant
-		if(args.size() == 2) {
-			if(source instanceof EPlayer) {
+		if (args.size() == 2) {
+			if (source instanceof EPlayer) {
 				Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(args.get(0));
 				// Le joueur destination existe
-				if(optPlayer.isPresent()) {
+				if (optPlayer.isPresent()) {
 					resultat = executePay((EPlayer) source, optPlayer.get(), args.get(1));
 				// Le joueur destination est introuvable
 				} else {
@@ -102,19 +102,19 @@ public class EEPay extends ECommand<EverEconomy> {
 		Optional<UniqueAccount> staff_account = staff.getAccount();
 		Optional<UniqueAccount> player_account = player.getAccount();
 		// Le compte existe
-		if(staff_account.isPresent() && player_account.isPresent()) {
+		if (staff_account.isPresent() && player_account.isPresent()) {
 			// Nombre valide
 			try {
 				BigDecimal amount = new BigDecimal(Double.parseDouble(amount_name));
 				amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
 				// La source et le joueur sont différent
-				if(!staff.equals(player)){
+				if (!staff.equals(player)){
 					ResultType result = staff_account.get().transfer(player_account.get(), this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
 					BigDecimal staff_balance = staff_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 					BigDecimal player_balance = player_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 					
 					// Transfert réussit
-					if(result.equals(ResultType.SUCCESS)) {
+					if (result.equals(ResultType.SUCCESS)) {
 						staff.sendMessage(
 								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
 									.append(this.plugin.getService().replace(EEMessages.PAY_STAFF.get())
@@ -134,7 +134,7 @@ public class EEPay extends ECommand<EverEconomy> {
 									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(player_balance))
 									.build());
 					// Transfert erreur
-					} else if(result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
+					} else if (result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
 						staff.sendMessage(
 								ETextBuilder.toBuilder(EEMessages.PREFIX.getText())
 									.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_MIN.get())
@@ -144,7 +144,7 @@ public class EEPay extends ECommand<EverEconomy> {
 									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
 									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(staff_balance))
 									.build());
-					} else if(result.equals(ResultType.ACCOUNT_NO_SPACE)) {
+					} else if (result.equals(ResultType.ACCOUNT_NO_SPACE)) {
 						staff.sendMessage(
 								ETextBuilder.toBuilder(EEMessages.PREFIX.getText())
 									.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_MAX.get())

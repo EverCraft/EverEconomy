@@ -49,9 +49,9 @@ public class ELog {
 		this.transaction = transaction;
 		this.cause = cause;
 		
-		if(to != null) {
+		if (to != null) {
 			Optional<User> user = this.plugin.getEServer().getUser(to);
-			if(user.isPresent()){
+			if (user.isPresent()){
 				this.to = user.get().getName();
 			} else {
 				this.to = to;
@@ -62,7 +62,7 @@ public class ELog {
 	}
 	
 	public Text replace(final String transaction, final String transfer) {
-		if(to != null) {
+		if (to != null) {
 			return ETextBuilder.toBuilder(transfer
 						.replaceAll("<before>", this.before.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString())
 						.replaceAll("<after>", this.after.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString())
