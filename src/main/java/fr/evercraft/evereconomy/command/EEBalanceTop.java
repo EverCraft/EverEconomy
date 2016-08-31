@@ -25,7 +25,6 @@ import java.util.UUID;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
@@ -33,6 +32,7 @@ import org.spongepowered.api.text.format.TextColors;
 import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ECommand;
+import fr.evercraft.everapi.server.user.EUser;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
@@ -89,7 +89,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 			List<Text> lists = new ArrayList<Text>();
 			Integer cpt = 1;
 			for (Entry<UUID, BigDecimal> player : this.plugin.getService().topUniqueAccount(30).entrySet()) {
-				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
+				Optional<EUser> user = this.plugin.getEServer().getEUser(player.getKey());
 				// Si le User existe bien
 				if (user.isPresent()){
 					lists.add(ETextBuilder.toBuilder(this.plugin.getService().replace(EEMessages.BALANCE_TOP_LINE.get())
