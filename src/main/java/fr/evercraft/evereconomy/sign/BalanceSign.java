@@ -26,7 +26,7 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.signs.SignSubject;
+import fr.evercraft.everapi.services.sign.SignSubject;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EverEconomy;
