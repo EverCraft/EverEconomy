@@ -119,7 +119,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 		try {
 			connection = this.plugin.getDataBases().getConnection();
 			String query = "SELECT * FROM `" + this.getTableLog() + "` WHERE identifier = ? AND currency = ?;";
-			preparedStatement = this.plugin.getDataBases().getConnection().prepareStatement(query);
+			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, identifier);
 			preparedStatement.setString(2, currency.getId());
 			ResultSet list = preparedStatement.executeQuery();
