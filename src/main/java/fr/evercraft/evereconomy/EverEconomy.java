@@ -20,6 +20,7 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.economy.EconomyService;
 
+import fr.evercraft.everapi.EverAPI;
 import fr.evercraft.everapi.exception.PluginDisableException;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.TopEconomyService;
@@ -34,15 +35,15 @@ import fr.evercraft.evereconomy.command.sub.EETake;
 import fr.evercraft.evereconomy.service.economy.EEconomyService;
 import fr.evercraft.evereconomy.sign.BalanceSign;
 
-@Plugin(id = "fr.evercraft.evereconomy", 
+@Plugin(id = "evereconomy", 
 		name = "EverEconomy", 
-		version = "1.2", 
+		version = EverAPI.VERSION, 
 		description = "Management of the economy",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut","lesbleu"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.2"),
-		    @Dependency(id = "fr.evercraft.everchat", version = "1.2", optional = true)
+		    @Dependency(id = "everapi", version = EverAPI.VERSION),
+		    @Dependency(id = "everchat", version = EverAPI.VERSION, optional = true)
 		})
 public class EverEconomy extends EPlugin {
 
