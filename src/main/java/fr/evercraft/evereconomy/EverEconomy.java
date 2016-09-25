@@ -43,7 +43,8 @@ import fr.evercraft.evereconomy.sign.BalanceSign;
 		authors = {"rexbut","lesbleu"},
 		dependencies = {
 		    @Dependency(id = "everapi", version = EverAPI.VERSION),
-		    @Dependency(id = "everchat", version = EverAPI.VERSION, optional = true)
+		    @Dependency(id = "everchat", version = EverAPI.VERSION, optional = true),
+		    @Dependency(id = "spongeapi", version = EverAPI.SPONGEAPI_VERSION)
 		})
 public class EverEconomy extends EPlugin {
 
