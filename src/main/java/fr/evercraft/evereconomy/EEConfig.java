@@ -21,7 +21,7 @@ import java.util.Arrays;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.plugin.file.EMessage;
 
-public class EEConfig extends EConfig {
+public class EEConfig extends EConfig<EverEconomy> {
 
 	public EEConfig(EverEconomy plugin) {
 		super(plugin);

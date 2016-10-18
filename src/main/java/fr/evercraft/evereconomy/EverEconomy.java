@@ -46,7 +46,7 @@ import fr.evercraft.evereconomy.sign.BalanceSign;
 		    @Dependency(id = "everchat", version = EverAPI.VERSION, optional = true),
 		    @Dependency(id = "spongeapi", version = EverAPI.SPONGEAPI_VERSION)
 		})
-public class EverEconomy extends EPlugin {
+public class EverEconomy extends EPlugin<EverEconomy> {
 
 	private EEConfig configs;
 	private EEMessage messages;

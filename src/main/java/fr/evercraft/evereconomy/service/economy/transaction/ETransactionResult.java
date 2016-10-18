@@ -29,6 +29,7 @@ import org.spongepowered.api.service.economy.transaction.TransactionResult;
 import org.spongepowered.api.service.economy.transaction.TransactionType;
 
 import fr.evercraft.everapi.plugin.EPlugin;
+import fr.evercraft.evereconomy.EverEconomy;
 import fr.evercraft.evereconomy.service.economy.event.EEconomyTransactionEvent;
 
 public class ETransactionResult implements TransactionResult {
@@ -40,7 +41,7 @@ public class ETransactionResult implements TransactionResult {
 	private final ResultType result;
 	private final TransactionType transaction;
 
-	public ETransactionResult(final EPlugin plugin, final Account account, final Currency currency, 
+	public ETransactionResult(final EPlugin<EverEconomy> plugin, final Account account, final Currency currency, 
 			final BigDecimal amount, final Set<Context> contexts, final ResultType result, final TransactionType transaction) {
 		this.account = account;
 		this.currency = currency;
