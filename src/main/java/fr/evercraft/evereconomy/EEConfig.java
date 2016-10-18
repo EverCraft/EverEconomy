@@ -33,8 +33,8 @@ public class EEConfig extends EConfig {
 	}
 
 	public void loadDefault() {
-		addDefault("debug", false, "Displays plugin performance in the logs");
-		addDefault("language", EMessage.FRENCH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
+		addDefault("DEBUG", false, "Displays plugin performance in the logs");
+		addDefault("LANGUAGE", EMessage.FRENCH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
 		
 		addComment("SQL", 	"Save the user in a database : ",
 				" H2 : \"jdbc:h2:" + this.plugin.getPath().toAbsolutePath() + "/data\"",
