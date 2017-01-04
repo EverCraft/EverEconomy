@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +33,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.plugin.command.ESubCommand;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EECommand;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -41,6 +42,7 @@ import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.service.economy.ELog;
 
 public class EELog extends ESubCommand<EverEconomy> {
+
 	public EELog(final EverEconomy plugin, final EECommand parent) {
         super(plugin, parent, "log");
     }
@@ -50,7 +52,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(EEMessages.RESET_DESCRIPTION.get()));
+		return EEMessages.RESET_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
 	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -62,7 +64,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 	}
 
 	public Text help(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.get() + ">")
+		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.getString() + ">")
 				.onClick(TextActions.suggestCommand("/" + this.getName()))
 				.color(TextColors.RED)
 				.build();
@@ -81,7 +83,9 @@ public class EELog extends ESubCommand<EverEconomy> {
 				resultat = true;
 			// Le joueur est introuvable
 			} else {
-				source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
+				EAMessages.PLAYER_NOT_FOUND.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(source);
 			}
 		} else if (args.size() == 2) {
 			// Si il a la permission
@@ -94,11 +98,13 @@ public class EELog extends ESubCommand<EverEconomy> {
 					resultat = true;
 				// Le joueur est introuvable
 				} else {
-					source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
+					EAMessages.PLAYER_NOT_FOUND.sender()
+						.prefix(EEMessages.PREFIX)
+						.sendTo(source);
 				}
 			// Il n'a pas la permission
 			} else {
-				source.sendMessage(EAMessages.NO_PERMISSION.getText());
+				EAMessages.NO_PERMISSION.sendTo(source);
 			}
 		} else {
 			source.sendMessage(this.help(source));
@@ -110,17 +116,19 @@ public class EELog extends ESubCommand<EverEconomy> {
 		List<Text> lists = new ArrayList<Text>();
 		
 		for (ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
-			lists.add(log.replace(EEMessages.LOG_LINE_TRANSACTION.get(),
-									EEMessages.LOG_LINE_TRANSFERT.get()));
+			lists.add(log.replace(EEMessages.LOG_LINE_TRANSACTION.getFormat(),
+									EEMessages.LOG_LINE_TRANSFERT.getFormat()));
 		}
 		
 		if (lists.isEmpty()) {
 			lists.add(EEMessages.LOG_EMPTY.getText());
 		}
 		
-		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(EChat.of(this.plugin.getService().replace(
-				EEMessages.LOG_TITLE.get()
-					.replaceAll("<player>", user.getName()))), 
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(this.plugin.getService().getReplaces());
+		replaces.put("<player>", EReplace.of(user.getName()));
+		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(
+				EEMessages.LOG_TITLE.getFormat().toText(replaces), 
 				lists, player);
 	}
 	
@@ -129,9 +137,13 @@ public class EELog extends ESubCommand<EverEconomy> {
 		
 		if (logs.isEmpty()) {
 			if (player.getIdentifier().equals(user.getIdentifier())) {
-				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + this.plugin.getService().replace(EEMessages.LOG_PRINT_EMPTY_EQUALS.get())));
+				EEMessages.LOG_PRINT_EMPTY_EQUALS.sender()
+					.replace(this.plugin.getService().getReplaces())
+					.sendTo(player);
 			} else {
-				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + this.plugin.getService().replace(EEMessages.LOG_PRINT_EMPTY.get())));
+				EEMessages.LOG_PRINT_EMPTY.sender()
+					.replace(this.plugin.getService().getReplaces())
+					.sendTo(player);
 			}
 		} else {
 			File file = this.plugin.getPath().resolve("logs/" + user.getName() + ".log").toFile();
@@ -143,27 +155,27 @@ public class EELog extends ESubCommand<EverEconomy> {
 			try {
 				write = new FileWriter(file);
 				for (ELog log : this.plugin.getDataBases().selectLog(user.getIdentifier(), this.plugin.getService().getDefaultCurrency())) {
-					write.write(log.replace(EEMessages.LOG_PRINT_LINE_TRANSACTION.get(),
-											EEMessages.LOG_PRINT_LINE_TRANSFERT.get()).toPlain() + "\n");
+					write.write(log.replace(EEMessages.LOG_PRINT_LINE_TRANSACTION.getFormat(),
+											EEMessages.LOG_PRINT_LINE_TRANSFERT.getFormat()).toPlain() + "\n");
 				}
 				
 				if (player.getIdentifier().equals(user.getIdentifier())) {
-					player.sendMessage(
-							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-								.append(this.plugin.getService().replace(EEMessages.LOG_PRINT.get())
-										.replaceAll("<player>", user.getName())
-										.replaceAll("<file>", file.getName()))
-								.build());
+					EEMessages.LOG_PRINT.sender()
+						.replace(this.plugin.getService().getReplaces())
+						.replace("<player>", user.getName())
+						.replace("<file>", file.getName())
+						.sendTo(player);
 				} else {
-					player.sendMessage(
-							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-								.append(this.plugin.getService().replace(EEMessages.LOG_PRINT_EQUALS.get())
-										.replaceAll("<player>", user.getName())
-										.replaceAll("<file>", file.getName()))
-								.build());
+					EEMessages.LOG_PRINT_EQUALS.sender()
+						.replace(this.plugin.getService().getReplaces())
+						.replace("<player>", user.getName())
+						.replace("<file>", file.getName())
+						.sendTo(player);
 				}
 			} catch (IOException e) {
-				player.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR.get()));
+				EAMessages.COMMAND_ERROR.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(player);
 			} finally {
 				try {if (write != null) write.close();} catch (IOException e) {}
 			}

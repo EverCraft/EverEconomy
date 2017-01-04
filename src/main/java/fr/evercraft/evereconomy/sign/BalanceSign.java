@@ -27,7 +27,6 @@ import org.spongepowered.api.world.World;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.sign.SignSubject;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EverEconomy;
 
@@ -48,31 +47,30 @@ public class BalanceSign implements SignSubject {
 
 	@Override
 	public boolean create(EPlayer player, Location<World> location, SignData data) {
-		player.sendMessage(EEMessages.PREFIX.getText().concat(EEMessages.SIGN_BALANCE_CREATE.getText()));
+		EEMessages.SIGN_BALANCE_CREATE.sendTo(player);
 		return true;
 	}
 
 	@Override
 	public boolean useEnable(EPlayer player, Sign sign) {
 		BigDecimal balance = player.getBalance();
-		player.sendMessage(
-				ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-					.append(this.plugin.getService().replace(EEMessages.BALANCE_PLAYER.get())
-							.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
-					.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
-					.build());
+		EEMessages.BALANCE_PLAYER.sender()
+			.replace(this.plugin.getService().getReplaces())
+			.replace("<solde>", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
+			.replace("<solde_format>", () -> this.plugin.getService().getDefaultCurrency().format(balance))
+			.sendTo(player);
 		return true;
 	}
 
 	@Override
 	public boolean useDisable(EPlayer player, Sign sign) {
-		player.sendMessage(EEMessages.PREFIX.getText().concat(EEMessages.SIGN_BALANCE_DISABLE.getText()));
+		EEMessages.SIGN_BALANCE_DISABLE.sendTo(player);
 		return true;
 	}
 
 	@Override
 	public boolean remove(EPlayer player, Location<World> location, final List<Text> sign) {
-		player.sendMessage(EEMessages.PREFIX.getText().concat(EEMessages.SIGN_BALANCE_BREAK.getText()));
+		EEMessages.SIGN_BALANCE_BREAK.sendTo(player);
 		return false;
 	}
 	

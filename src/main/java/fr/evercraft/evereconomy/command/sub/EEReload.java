@@ -26,7 +26,6 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ESubCommand;
 import fr.evercraft.evereconomy.EECommand;
 import fr.evercraft.evereconomy.EEPermissions;
@@ -43,7 +42,7 @@ public class EEReload extends ESubCommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(EAMessages.RELOAD_DESCRIPTION.get()));
+		return EAMessages.RELOAD_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
 	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -71,7 +70,9 @@ public class EEReload extends ESubCommand<EverEconomy> {
 
 	private boolean commandReload(final CommandSource player) {
 		this.plugin.reload();
-		player.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.RELOAD_COMMAND.get()));
+		EAMessages.RELOAD_COMMAND.sender()
+			.prefix(EEMessages.PREFIX)
+			.sendTo(player);
 		return true;
 	}
 }

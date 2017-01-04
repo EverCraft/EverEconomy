@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Optional;
@@ -44,6 +45,7 @@ import com.google.common.cache.LoadingCache;
 
 import fr.evercraft.everapi.exception.ServerDisableException;
 import fr.evercraft.everapi.java.Chronometer;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.services.TopEconomyService;
 import fr.evercraft.evereconomy.EverEconomy;
 import fr.evercraft.evereconomy.service.economy.account.EUniqueAccount;
@@ -244,9 +246,11 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		return top;
 	}
 	
-	public String replace(final String message) {
-		return message.replaceAll("<symbol>", this.plugin.getService().getDefaultCurrency().getSymbol().toPlain())
-				.replaceAll("<money_singular>", this.plugin.getService().getDefaultCurrency().getDisplayName().toPlain())
-				.replaceAll("<money_plural>", this.plugin.getService().getDefaultCurrency().getPluralDisplayName().toPlain());
+	public HashMap<String, EReplace<?>> getReplaces() {
+		HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.put("<symbol>", EReplace.of(this.plugin.getService().getDefaultCurrency().getSymbol().toPlain()));
+		replaces.put("<money_singular>", EReplace.of(this.plugin.getService().getDefaultCurrency().getDisplayName().toPlain()));
+		replaces.put("<money_plural>", EReplace.of(this.plugin.getService().getDefaultCurrency().getPluralDisplayName().toPlain()));
+		return replaces;
 	}
 }

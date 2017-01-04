@@ -18,6 +18,7 @@ package fr.evercraft.evereconomy.command;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +31,10 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.sponge.UtilsCause;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ECommand;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -50,7 +50,7 @@ public class EEPay extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(EEMessages.PAY_DESCRIPTION.get()));
+		return EEMessages.PAY_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -64,8 +64,8 @@ public class EEPay extends ECommand<EverEconomy> {
 	}
 
 	public Text help(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.get() + "> "
-												  + "<" + EAMessages.ARGS_AMOUNT.get() + ">")
+		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.getString() + "> "
+												  + "<" + EAMessages.ARGS_AMOUNT.getString() + ">")
 					.onClick(TextActions.suggestCommand("/" + this.getName()))
 					.color(TextColors.RED)
 					.build();
@@ -84,14 +84,14 @@ public class EEPay extends ECommand<EverEconomy> {
 					resultat = executePay((EPlayer) source, optPlayer.get(), args.get(1));
 				// Le joueur destination est introuvable
 				} else {
-					source.sendMessage(EEMessages.PREFIX.getText().concat(EAMessages.PLAYER_NOT_FOUND.getText()));
+					EAMessages.PLAYER_NOT_FOUND.sender().prefix(EEMessages.PREFIX).sendTo(source);
 				}
 			} else {
-				source.sendMessage(EEMessages.PREFIX.getText().concat(EAMessages.COMMAND_ERROR_FOR_PLAYER.getText()));
+				EAMessages.COMMAND_ERROR_FOR_PLAYER.sender().prefix(EEMessages.PREFIX).sendTo(source);
 			}
 		// Nombre d'argument incorrect
 		} else {
-			source.sendMessage(help(source));
+			source.sendMessage(this.help(source));
 		}
 		return resultat;
 	}
@@ -107,73 +107,52 @@ public class EEPay extends ECommand<EverEconomy> {
 			try {
 				BigDecimal amount = new BigDecimal(Double.parseDouble(amount_name));
 				amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
+				
+				HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+				replaces.putAll(this.plugin.getService().getReplaces());
+				replaces.put("<player>", EReplace.of(player.getName()));
+				replaces.put("<amount>", EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
+				replaces.put("<amount_format>", EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
+				
 				// La source et le joueur sont différent
 				if (!staff.equals(player)){
 					ResultType result = staff_account.get().transfer(player_account.get(), this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
 					BigDecimal staff_balance = staff_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 					BigDecimal player_balance = player_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 					
+					replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(staff_balance)));
+					replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(staff_balance)));
+					
 					// Transfert réussit
 					if (result.equals(ResultType.SUCCESS)) {
-						staff.sendMessage(
-								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-									.append(this.plugin.getService().replace(EEMessages.PAY_STAFF.get())
-											.replaceAll("<player>", player.getName())
-											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
-											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(staff_balance)))
-									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
-									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(staff_balance))
-									.build());
-						player.sendMessage(
-								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-									.append(this.plugin.getService().replace(EEMessages.PAY_PLAYER.get())
-											.replaceAll("<staff>", staff.getName())
-											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
-											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(player_balance)))
-									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
-									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(player_balance))
-									.build());
+						EEMessages.PAY_STAFF.sender().replace(replaces).sendTo(staff);
+						
+						replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player_balance)));
+						replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player_balance)));
+						EEMessages.PAY_PLAYER.sender().replace(replaces).sendTo(player);
 					// Transfert erreur
 					} else if (result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
-						staff.sendMessage(
-								ETextBuilder.toBuilder(EEMessages.PREFIX.getText())
-									.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_MIN.get())
-											.replaceAll("<player>", player.getName())
-											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
-											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(staff_balance)))
-									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
-									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(staff_balance))
-									.build());
+						EEMessages.PAY_ERROR_MIN.sender().replace(replaces).sendTo(staff);
 					} else if (result.equals(ResultType.ACCOUNT_NO_SPACE)) {
-						staff.sendMessage(
-								ETextBuilder.toBuilder(EEMessages.PREFIX.getText())
-									.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_MAX.get())
-											.replaceAll("<staff>", staff.getName())
-											.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount))
-											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(staff_balance)))
-									.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
-									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(staff_balance))
-									.build());
+						EEMessages.PAY_ERROR_MAX.sender().replace(replaces).sendTo(staff);
 					} else {
-						staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.NUMBER_INVALID.get()));
+						EAMessages.NUMBER_INVALID.sender().prefix(EEMessages.PREFIX).sendTo(staff);
 					}
 				// La source et le joueur sont identique
 				} else {
-					staff.sendMessage(
-							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-								.append(this.plugin.getService().replace(EEMessages.PAY_ERROR_EQUALS.get())
-										.replaceAll("<amount>", this.plugin.getService().getDefaultCurrency().cast(amount)))
-								.replace("<amount_format>", this.plugin.getService().getDefaultCurrency().format(amount))
-								.build());
+					EEMessages.PAY_ERROR_EQUALS.sender().replace(replaces).sendTo(staff);
 				}
 			// Nombre invalide
 			} catch(NumberFormatException e) {
-				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.IS_NOT_NUMBER.get()
-						.replaceAll("<number>", amount_name)));
+				EAMessages.IS_NOT_NUMBER.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(staff);
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
+			EAMessages.ACCOUNT_NOT_FOUND.sender()
+				.prefix(EEMessages.PREFIX)
+				.sendTo(staff);
 		}
 		return resultat;
 	}

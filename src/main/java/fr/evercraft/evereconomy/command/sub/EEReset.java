@@ -18,12 +18,12 @@ package fr.evercraft.evereconomy.command.sub;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.service.economy.transaction.ResultType;
@@ -32,10 +32,9 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.sponge.UtilsCause;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ESubCommand;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EECommand;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -51,7 +50,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(EEMessages.RESET_DESCRIPTION.get()));
+		return EEMessages.RESET_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
 	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -63,7 +62,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 	}
 
 	public Text help(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.get() + ">")
+		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.getString() + ">")
 				.onClick(TextActions.suggestCommand("/" + this.getName()))
 				.color(TextColors.RED)
 				.build();
@@ -80,7 +79,9 @@ public class EEReset extends ESubCommand<EverEconomy> {
 				resultat = commandReset(source, user.get());
 			// Le joueur est introuvable
 			} else {
-				source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
+				EAMessages.PLAYER_NOT_FOUND.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(source);
 			}
 		} else {
 			source.sendMessage(this.help(source));
@@ -98,40 +99,41 @@ public class EEReset extends ESubCommand<EverEconomy> {
 			if (account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), UtilsCause.command(this.plugin, staff)).getResult().equals(ResultType.SUCCESS)){
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				resultat = true;
+				
+				HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+				replaces.putAll(this.plugin.getService().getReplaces());
+				replaces.put("<player>", EReplace.of(user.getName()));
+				replaces.put("<staff>", EReplace.of(staff.getName()));
+				replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(balance)));
+				replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(balance)));
+				
 				// La source et le joueur sont différent
-				if (!user.getIdentifier().equals(staff.getIdentifier())){
-					staff.sendMessage(ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-								.append(this.plugin.getService().replace(EEMessages.RESET_OTHERS_STAFF.get())
-										.replaceAll("<player>", user.getName())
-										.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
-								.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
-								.build());
-					Optional<Player> player = user.getPlayer();
-					if (player.isPresent()) {
-						player.get().sendMessage(
-								ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-									.append(this.plugin.getService().replace(EEMessages.RESET_OTHERS_PLAYER.get())
-											.replaceAll("<staff>", staff.getName())
-											.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
-									.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
-									.build());
-					}
+				if (!user.getIdentifier().equals(staff.getIdentifier())) {
+					EEMessages.RESET_OTHERS_STAFF.sender()
+						.replace(replaces)
+						.sendTo(staff);
+						
+					user.getPlayer().ifPresent(player -> 
+						EEMessages.RESET_OTHERS_PLAYER.sender()
+						.replace(replaces)
+						.sendTo(player));
 				// La source et le joueur sont identique
 				} else {
-					staff.sendMessage(
-							ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-								.append(this.plugin.getService().replace(EEMessages.RESET_PLAYER.get())
-										.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
-								.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
-								.build());
+					EEMessages.RESET_PLAYER.sender()
+						.replace(replaces)
+						.sendTo(staff);
 				}
 			// Impossible de reset
 			} else {
-				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR.get()));
+				EAMessages.COMMAND_ERROR.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(staff);
 			}
 		// Le compte est introuvable
 		} else {
-			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
+			EAMessages.ACCOUNT_NOT_FOUND.sender()
+				.prefix(EEMessages.PREFIX)
+				.sendTo(staff);
 		}
 		return resultat;
 	}

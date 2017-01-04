@@ -19,7 +19,6 @@ package fr.evercraft.evereconomy;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.EParentCommand;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 
@@ -36,7 +35,7 @@ public class EECommand extends EParentCommand<EverEconomy> {
 
 	@Override
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(EEMessages.DESCRIPTION.get()));
+		return EEMessages.DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 
 	@Override

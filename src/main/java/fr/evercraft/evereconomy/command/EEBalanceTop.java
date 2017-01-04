@@ -18,6 +18,7 @@ package fr.evercraft.evereconomy.command;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -30,10 +31,9 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.everapi.server.user.EUser;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -50,7 +50,7 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(EEMessages.BALANCE_TOP_DESCRIPTION.get()));
+		return EEMessages.BALANCE_TOP_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -92,12 +92,14 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 				Optional<EUser> user = this.plugin.getEServer().getEUser(player.getKey());
 				// Si le User existe bien
 				if (user.isPresent()){
-					lists.add(ETextBuilder.toBuilder(this.plugin.getService().replace(EEMessages.BALANCE_TOP_LINE.get())
-									.replaceAll("<player>", user.get().getName())
-									.replaceAll("<number>", cpt.toString())
-									.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(player.getValue())))
-							.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(player.getValue()))
-							.build());
+					HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+					replaces.putAll(this.plugin.getService().getReplaces());
+					replaces.put("<player>", EReplace.of(user.get().getName()));
+					replaces.put("<number>", EReplace.of(cpt.toString()));
+					replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player.getValue())));
+					replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player.getValue())));
+					
+					lists.add(EEMessages.BALANCE_TOP_LINE.getFormat().toText(replaces));
 					cpt++;
 				}
 			}
@@ -109,7 +111,9 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 			this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(EEMessages.BALANCE_TOP_TITLE.getText(), lists, staff);
 		// Le service d'économie n'est pas EverEconomy
 		} else {
-			staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR.get()));
+			EAMessages.COMMAND_ERROR.sender()
+				.prefix(EEMessages.PREFIX)
+				.sendTo(staff);
 		}
 		return resultat;
 	}

@@ -17,13 +17,16 @@
 package fr.evercraft.evereconomy.service.economy;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.java.UtilsDouble;
+import fr.evercraft.everapi.message.format.EFormatString;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.plugin.EChat;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EverEconomy;
 
 public class ECurrency implements Currency {
@@ -95,18 +98,18 @@ public class ECurrency implements Currency {
 
 	@Override
 	public Text format(final BigDecimal amount, final int numFractionDigits) {
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		
+		replaces.put("<amount>", EReplace.of(amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString()));
+		replaces.put("<symbol>", EReplace.of(this.symbol));
+		
 		if (amount.compareTo(BigDecimal.ONE) <= 0) {
-			return ETextBuilder.toBuilder(this.format
-						.replace("<amount>", amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString()))
-					.replace("<currency>", this.singular)
-					.replace("<symbol>", this.symbol)
-					.build();
+			replaces.put("<currency>", EReplace.of(this.singular));
+		} else {
+			replaces.put("<currency>", EReplace.of(this.plural));
 		}
-		return ETextBuilder.toBuilder(this.format
-						.replace("<amount>", amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString()))
-					.replace("<currency>", this.plural)
-					.replace("<symbol>", this.symbol)
-					.build();
+		
+		return EFormatString.of(this.format).toText(replaces);
 	}
 	
 	public String cast(BigDecimal amount) {

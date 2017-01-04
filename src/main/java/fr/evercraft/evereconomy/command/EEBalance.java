@@ -31,9 +31,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ECommand;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -49,13 +47,13 @@ public class EEBalance extends ECommand<EverEconomy> {
 	}
 
 	public Text description(final CommandSource source) {
-		return EChat.of(this.plugin.getService().replace(EEMessages.BALANCE_DESCRIPTION.get()));
+		return EEMessages.BALANCE_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if (args.size() == 1 && source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
-			suggests = null;
+			suggests.addAll(this.getAllPlayers(source));
 		}
 		return suggests;
 	}
@@ -63,7 +61,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	public Text help(final CommandSource source) {
 		Text help;
 		if (source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
-			help = Text.builder("/balance [" + EAMessages.ARGS_PLAYER.get() + "]")
+			help = Text.builder("/balance [" + EAMessages.ARGS_PLAYER.getString() + "]")
 					.onClick(TextActions.suggestCommand("/balance "))
 					.color(TextColors.RED)
 					.build();
@@ -87,7 +85,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				resultat = executeBalance((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
-				source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.COMMAND_ERROR_FOR_PLAYER.get()));
+				EAMessages.COMMAND_ERROR_FOR_PLAYER.sendTo(source);
 			}
 			
 		// Si on connait le joueur
@@ -100,27 +98,28 @@ public class EEBalance extends ECommand<EverEconomy> {
 					resultat = executeBalanceOthers(source, user.get());
 				// Le joueur est introuvable
 				} else {
-					source.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.PLAYER_NOT_FOUND.get()));
+					EAMessages.PLAYER_NOT_FOUND.sender()
+						.prefix(EEMessages.PREFIX)
+						.sendTo(source);
 				}
 			// Il n'a pas la permission
 			} else {
-				source.sendMessage(EAMessages.NO_PERMISSION.getText());
+				EAMessages.NO_PERMISSION.sendTo(source);
 			}
 		// Nombre d'argument incorrect
 		} else {
-			source.sendMessage(getHelp(source).get());
+			source.sendMessage(this.getHelp(source).get());
 		}
 		return resultat;
 	}
 	
 	public boolean executeBalance(final EPlayer player) {
 		BigDecimal balance = player.getBalance();
-		player.sendMessage(
-				ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-					.append(this.plugin.getService().replace(EEMessages.BALANCE_PLAYER.get())
-							.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
-					.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
-					.build());
+		EEMessages.BALANCE_PLAYER.sender()
+			.replace(this.plugin.getService().getReplaces())
+			.replace("<solde>", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
+			.replace("<solde_format>", () -> this.plugin.getService().getDefaultCurrency().format(balance))
+			.sendTo(player);
 		return true;
 	}
 	
@@ -134,21 +133,22 @@ public class EEBalance extends ECommand<EverEconomy> {
 			// Le compte existe
 			if (account.isPresent()) {
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
-				staff.sendMessage(
-						ETextBuilder.toBuilder(EEMessages.PREFIX.get())
-							.append(this.plugin.getService().replace(EEMessages.BALANCE_OTHERS.get())
-									.replaceAll("<player>", user.getName())
-									.replaceAll("<solde>", this.plugin.getService().getDefaultCurrency().cast(balance)))
-							.replace("<solde_format>", this.plugin.getService().getDefaultCurrency().format(balance))
-							.build());
+				EEMessages.BALANCE_OTHERS.sender()
+					.replace(this.plugin.getService().getReplaces())
+					.replace("<player>", () -> user.getName())
+					.replace("<solde>", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
+					.replace("<solde_format>", () -> this.plugin.getService().getDefaultCurrency().format(balance))
+					.sendTo(staff);
 				resultat = true;
 			// Le compte est introuvable
 			} else {
-				staff.sendMessage(EChat.of(EEMessages.PREFIX.get() + EAMessages.ACCOUNT_NOT_FOUND.get()));
+				EAMessages.ACCOUNT_NOT_FOUND.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(staff);
 			}
 		// La source et le joueur sont identique
 		} else {
-			executeBalance((EPlayer) staff);
+			this.executeBalance((EPlayer) staff);
 		}
 		return resultat;
 	}

@@ -18,13 +18,18 @@ package fr.evercraft.evereconomy.service.economy;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.Optional;
 
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.text.ETextBuilder;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+
+import fr.evercraft.everapi.message.format.EFormat;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.evereconomy.EverEconomy;
 
 public class ELog {
@@ -38,6 +43,8 @@ public class ELog {
 	private final String to;
 	private final String cause;
 	
+	private final Map<String, EReplace<?>> replaces;
+	
 	public ELog(final EverEconomy plugin, final Timestamp time, final String identifier, final Currency currency,
 			final BigDecimal before, final BigDecimal after, final String transaction, final String to,
 			final String cause) {
@@ -49,6 +56,15 @@ public class ELog {
 		this.transaction = transaction;
 		this.cause = cause;
 		
+		Builder<String, EReplace<?>> builder = ImmutableMap.builder();
+		builder.put("<before>", EReplace.of(() -> this.before.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString()));
+		builder.put("<after>", EReplace.of(() -> this.after.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString()));
+		builder.put("<transaction>", EReplace.of(this.transaction));
+		builder.put("<cause>", EReplace.of(this.cause));
+		builder.put("<time>", EReplace.of(this.time));
+		builder.put("<before_format>", EReplace.of(() -> this.currency.format(this.after)));
+		builder.put("<after_format>", EReplace.of(() -> this.currency.format(this.before)));
+		
 		if (to != null) {
 			Optional<User> user = this.plugin.getEServer().getUser(to);
 			if (user.isPresent()){
@@ -56,33 +72,24 @@ public class ELog {
 			} else {
 				this.to = to;
 			}
+			
+			builder.put("<player>", EReplace.of(this.to));
 		} else {
 			this.to = null;
 		}
+		
+		this.replaces = builder.build();
 	}
 	
-	public Text replace(final String transaction, final String transfer) {
-		if (to != null) {
-			return ETextBuilder.toBuilder(transfer
-						.replaceAll("<before>", this.before.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString())
-						.replaceAll("<after>", this.after.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString())
-						.replaceAll("<transaction>", this.transaction)
-						.replaceAll("<player>", this.to)
-						.replaceAll("<cause>", this.cause)
-						.replaceAll("<time>", this.time))
-					.replace("<before_format>", this.currency.format(this.after))
-					.replace("<after_format>", this.currency.format(this.before))
-					.build();
+	public Map<String, EReplace<?>> getReplaces() {
+		return this.replaces;
+	}
+	
+	public Text replace(final EFormat transaction, final EFormat transfert) {
+		if (this.to != null) {
+			return transaction.toText(this.replaces);
 		} else {
-			return ETextBuilder.toBuilder(transaction
-					.replaceAll("<before>", this.before.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString())
-					.replaceAll("<after>", this.after.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString())
-					.replaceAll("<transaction>", this.transaction)
-					.replaceAll("<cause>", this.cause)
-					.replaceAll("<time>", this.time))
-				.replace("<before_format>", this.currency.format(this.after))
-				.replace("<after_format>", this.currency.format(this.before))
-				.build();
+			return transfert.toText(this.replaces);
 		}
 	}
 }
