@@ -104,7 +104,9 @@ public class EEBalance extends ECommand<EverEconomy> {
 				}
 			// Il n'a pas la permission
 			} else {
-				EAMessages.NO_PERMISSION.sendTo(source);
+				EAMessages.NO_PERMISSION.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(source);
 			}
 		// Nombre d'argument incorrect
 		} else {

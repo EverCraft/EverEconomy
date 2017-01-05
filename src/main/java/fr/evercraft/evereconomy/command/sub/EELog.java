@@ -104,7 +104,9 @@ public class EELog extends ESubCommand<EverEconomy> {
 				}
 			// Il n'a pas la permission
 			} else {
-				EAMessages.NO_PERMISSION.sendTo(source);
+				EAMessages.NO_PERMISSION.sender()
+					.prefix(EEMessages.PREFIX)
+					.sendTo(source);
 			}
 		} else {
 			source.sendMessage(this.help(source));
