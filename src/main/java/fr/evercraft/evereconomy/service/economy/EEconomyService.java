@@ -44,9 +44,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import fr.evercraft.everapi.exception.ServerDisableException;
-import fr.evercraft.everapi.java.Chronometer;
 import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.services.TopEconomyService;
+import fr.evercraft.everapi.util.Chronometer;
 import fr.evercraft.evereconomy.EverEconomy;
 import fr.evercraft.evereconomy.service.economy.account.EUniqueAccount;
 import fr.evercraft.evereconomy.service.economy.account.EVirtualAccount;
