@@ -18,6 +18,7 @@ package fr.evercraft.evereconomy.command.sub;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +54,7 @@ public class EETake extends ESubCommand<EverEconomy> {
 		return EEMessages.TAKE_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
-	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
+	public Collection<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if (args.size() == 1){
 			suggests = null;
