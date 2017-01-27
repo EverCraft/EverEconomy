@@ -57,7 +57,7 @@ public class EEPay extends ECommand<EverEconomy> {
 	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if (args.size() == 1){
-			suggests = null;
+			suggests.addAll(this.getAllPlayers(source, true));
 		} else {
 			suggests.add("1");
 		}

@@ -57,7 +57,7 @@ public class EETake extends ESubCommand<EverEconomy> {
 	public Collection<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if (args.size() == 1){
-			suggests = null;
+			suggests.addAll(this.getAllUsers(args.get(0)));
 		} else if (args.size() == 2){
 			suggests.add("1");
 		}
@@ -65,7 +65,7 @@ public class EETake extends ESubCommand<EverEconomy> {
 	}
 
 	public Text help(final CommandSource source) {
-		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_PLAYER.getString() + "> "
+		return Text.builder("/" + this.getName() + " <" + EAMessages.ARGS_USER.getString() + "> "
 				  + "<" + EAMessages.ARGS_AMOUNT.getString() + ">")
 					.onClick(TextActions.suggestCommand("/" + this.getName()))
 					.color(TextColors.RED)

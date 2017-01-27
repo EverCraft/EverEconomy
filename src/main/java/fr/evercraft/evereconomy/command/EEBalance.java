@@ -54,7 +54,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if (args.size() == 1 && source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
-			suggests.addAll(this.getAllPlayers(source));
+			suggests.addAll(this.getAllUsers(args.get(0), source));
 		}
 		return suggests;
 	}
@@ -62,7 +62,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 	public Text help(final CommandSource source) {
 		Text help;
 		if (source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
-			help = Text.builder("/balance [" + EAMessages.ARGS_PLAYER.getString() + "]")
+			help = Text.builder("/balance [" + EAMessages.ARGS_USER.getString() + "]")
 					.onClick(TextActions.suggestCommand("/balance "))
 					.color(TextColors.RED)
 					.build();
