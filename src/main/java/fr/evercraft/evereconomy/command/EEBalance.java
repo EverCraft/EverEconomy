@@ -17,7 +17,7 @@
 package fr.evercraft.evereconomy.command;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -52,11 +52,10 @@ public class EEBalance extends ECommand<EverEconomy> {
 	}
 	
 	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
-		List<String> suggests = new ArrayList<String>();
 		if (args.size() == 1 && source.hasPermission(EEPermissions.BALANCE_OTHERS.get())){
-			suggests.addAll(this.getAllUsers(args.get(0), source));
+			return this.getAllUsers(args.get(0), source);
 		}
-		return suggests;
+		return Arrays.asList();
 	}
 
 	public Text help(final CommandSource source) {
