@@ -58,7 +58,7 @@ public class EEGive extends ESubCommand<EverEconomy> {
 		if (args.size() == 1){
 			return this.getAllUsers(args.get(0), source);
 		} else if (args.size() == 2){
-			Arrays.asList("1");
+			return Arrays.asList("1");
 		}
 		return Arrays.asList();
 	}

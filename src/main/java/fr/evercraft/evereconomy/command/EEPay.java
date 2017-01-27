@@ -55,10 +55,10 @@ public class EEPay extends ECommand<EverEconomy> {
 	}
 	
 	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
-		if (args.size() == 1){
+		if (args.size() == 1) {
 			return this.getAllPlayers(source, true);
-		} else {
-			Arrays.asList("1");
+		} else if (args.size() == 2) {
+			return Arrays.asList("1");
 		}
 		return Arrays.asList();
 	}
