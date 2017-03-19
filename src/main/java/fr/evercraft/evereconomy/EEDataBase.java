@@ -93,7 +93,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 			preparedStatement.setString(7, String.join(", ", cause.getNamedCauses().keySet()));
 			
 			preparedStatement.execute();
-			this.plugin.getLogger().debug("Log : (identifier='" + identifier + "';"
+			this.plugin.getELogger().debug("Log : (identifier='" + identifier + "';"
 													+ "currency='" + currency.getId() + "';"
 													+ "before='" + before + "';"
 													+ "after='" + after + "';"
@@ -101,7 +101,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 													+ "to='" + to + "';"
 													+ "cause='" + String.join(", ", cause.getNamedCauses().keySet()) + "')");
 		} catch (SQLException e) {
-	    	this.plugin.getLogger().warn("Error during a change of log : " + e.getMessage());
+	    	this.plugin.getELogger().warn("Error during a change of log : " + e.getMessage());
 		} catch (ServerDisableException e) {
 			e.execute();
 		} finally {
@@ -127,7 +127,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 				logs.add(new ELog(this.plugin, list.getTimestamp("time"), identifier,  currency, list.getBigDecimal("before"), list.getBigDecimal("after"), list.getString("transaction"), list.getString("to"), list.getString("cause")));
 			}
 		} catch (SQLException e) {
-	    	this.plugin.getLogger().warn("Error during a change of log : (identifier:'" + identifier + "'): " + e.getMessage());
+	    	this.plugin.getELogger().warn("Error during a change of log : (identifier:'" + identifier + "'): " + e.getMessage());
 		} catch (ServerDisableException e) {
 			e.execute();
 		} finally {

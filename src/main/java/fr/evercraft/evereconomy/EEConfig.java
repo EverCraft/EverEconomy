@@ -29,7 +29,7 @@ public class EEConfig extends EConfig<EverEconomy> {
 	
 	public void reload() {
 		super.reload();
-		this.plugin.getLogger().setDebug(this.isDebug());
+		this.plugin.getELogger().setDebug(this.isDebug());
 	}
 
 	public void loadDefault() {

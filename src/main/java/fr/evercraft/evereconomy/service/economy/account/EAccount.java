@@ -292,7 +292,7 @@ public abstract class EAccount implements Account {
 				Optional<ECurrency> currency = this.plugin.getService().getCurrency(list.getString("currency"));
 				if (currency.isPresent()){
 					this.currencies.put(currency.get(), list.getBigDecimal("balance"));
-					this.plugin.getLogger().debug("Log : (identifier='" + identifier + "';"
+					this.plugin.getELogger().debug("Log : (identifier='" + identifier + "';"
 														+ "currency='" + currency.get().getId() + "';"
 														+ "balance='" + list.getBigDecimal("balance").toString() + "')");
 				}
@@ -305,7 +305,7 @@ public abstract class EAccount implements Account {
 				}
 			}
 		} catch (SQLException e) {
-	    	this.plugin.getLogger().warn("Error during a change of account : (identifier:'" + this.identifier + "'): " + e.getMessage());
+	    	this.plugin.getELogger().warn("Error during a change of account : (identifier:'" + this.identifier + "'): " + e.getMessage());
 		} catch (ServerDisableException e) {
 			e.execute();
 		} finally {
@@ -337,11 +337,11 @@ public abstract class EAccount implements Account {
 			preparedStatement.setString(2, currency.getId());
 			preparedStatement.setBigDecimal(3, this.getBalance(currency));
 			preparedStatement.execute();
-			this.plugin.getLogger().debug("Adding to the database : (identifier='" + identifier + "';"
+			this.plugin.getELogger().debug("Adding to the database : (identifier='" + identifier + "';"
 																	+ "currency='" + currency.getId() + "';"
 																	+ "balance='" + this.getBalance(currency).toString() + "')");
 		} catch (SQLException e) {
-	    	this.plugin.getLogger().warn("Error during a change of account : (identifier:'" + this.identifier + "';"
+	    	this.plugin.getELogger().warn("Error during a change of account : (identifier:'" + this.identifier + "';"
 	    																	+ "currency:'" + currency.getName() + "';"
 	    																	+ "balance:" + this.getBalance(currency) + "'): " + e.getMessage());
 		} finally {
@@ -360,11 +360,11 @@ public abstract class EAccount implements Account {
 			preparedStatement.setString(2, this.identifier);
 			preparedStatement.setString(3, currency.getId());
 			preparedStatement.execute();
-			this.plugin.getLogger().debug("Updating the database : (identifier='" + identifier + "';"
+			this.plugin.getELogger().debug("Updating the database : (identifier='" + identifier + "';"
 																	+ "currency='" + currency.getId() + "';"
 																	+ "balance='" + this.getBalance(currency).toString() + "')");
 		} catch (SQLException e) {
-	    	this.plugin.getLogger().warn("Error during a change of account : (uuid:'" + this.identifier + "';"
+	    	this.plugin.getELogger().warn("Error during a change of account : (uuid:'" + this.identifier + "';"
 	    																   + "currency:'" + currency.getName() + "';"
 	    																   + "balance:" + this.getBalance(currency) + "'): " + e.getMessage());
 		} catch (ServerDisableException e) {
@@ -387,9 +387,9 @@ public abstract class EAccount implements Account {
 			preparedStatement.setString(1, this.identifier);
 			preparedStatement.setString(2, currency.getId());
 			preparedStatement.execute();
-			this.plugin.getLogger().debug("Remove from database : (identifier='" + identifier + "';currency='" + currency.getId() + "')");
+			this.plugin.getELogger().debug("Remove from database : (identifier='" + identifier + "';currency='" + currency.getId() + "')");
 		} catch (SQLException e) {
-	    	this.plugin.getLogger().warn("Error during a change of account : (identifier:'" + this.identifier + "';currency:'" + currency.getName() + "'): " + e.getMessage());
+	    	this.plugin.getELogger().warn("Error during a change of account : (identifier:'" + this.identifier + "';currency:'" + currency.getName() + "'): " + e.getMessage());
 		} catch (ServerDisableException e) {
 			e.execute();
 		} finally {
@@ -409,9 +409,9 @@ public abstract class EAccount implements Account {
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, this.identifier);
 			preparedStatement.execute();
-			this.plugin.getLogger().debug("Remove from database : (identifier='" + identifier + "')");
+			this.plugin.getELogger().debug("Remove from database : (identifier='" + identifier + "')");
 		} catch (SQLException e) {
-	    	this.plugin.getLogger().warn("Error during a change of account : (identifier:'" + this.identifier +  "'): " + e.getMessage());
+	    	this.plugin.getELogger().warn("Error during a change of account : (identifier:'" + this.identifier +  "'): " + e.getMessage());
 		} catch (ServerDisableException e) {
 			e.execute();
 		} finally {

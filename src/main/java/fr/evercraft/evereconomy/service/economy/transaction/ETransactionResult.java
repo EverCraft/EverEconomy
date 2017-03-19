@@ -50,7 +50,7 @@ public class ETransactionResult implements TransactionResult {
 		this.result = result;
 		this.transaction = transaction;
 		
-		plugin.getLogger().debug("Event EconomyTransactionEvent : (Account='" + this.account.getIdentifier() +"')");
+		plugin.getELogger().debug("Event EconomyTransactionEvent : (Account='" + this.account.getIdentifier() +"')");
 		EconomyTransactionEvent event = new EEconomyTransactionEvent(Cause.source(plugin).build(), this);
 		plugin.getGame().getEventManager().post(event);
 	}

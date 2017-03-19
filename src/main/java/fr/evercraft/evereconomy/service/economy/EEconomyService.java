@@ -79,7 +79,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 			        	Chronometer chronometer = new Chronometer();
 			        	
 			        	EUniqueAccount subject = new EUniqueAccount(EEconomyService.this.plugin, uuid);
-			        	EEconomyService.this.plugin.getLogger().debug("Loading user '" + uuid.toString() + "' in " +  chronometer.getMilliseconds().toString() + " ms");
+			        	EEconomyService.this.plugin.getELogger().debug("Loading user '" + uuid.toString() + "' in " +  chronometer.getMilliseconds().toString() + " ms");
 			            
 			            return subject;
 			        }
@@ -137,7 +137,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 	    	}
 	    	return Optional.of(this.players.get(uuid));
 		} catch (ExecutionException e) {
-			this.plugin.getLogger().warn("Error : Loading user (identifier='" + uuid.toString() + "';message='" + e.getMessage() + "')");
+			this.plugin.getELogger().warn("Error : Loading user (identifier='" + uuid.toString() + "';message='" + e.getMessage() + "')");
 		}
 		return Optional.empty();
 	}
@@ -177,13 +177,13 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		// Si le joueur est dans le cache
 		if (player != null) {
 			this.players.putIfAbsent(uuid, player);
-			this.plugin.getLogger().debug("Loading player cache : " + uuid.toString());
+			this.plugin.getELogger().debug("Loading player cache : " + uuid.toString());
 		// Si le joueur n'est pas dans le cache
 		} else {
 			Chronometer chronometer = new Chronometer();
 			player = new EUniqueAccount(this.plugin, uuid);
 			this.players.putIfAbsent(uuid, player);
-			this.plugin.getLogger().debug("Loading player '" + uuid.toString() + "' in " +  chronometer.getMilliseconds().toString() + " ms");
+			this.plugin.getELogger().debug("Loading player '" + uuid.toString() + "' in " +  chronometer.getMilliseconds().toString() + " ms");
 		}
 	}
 	
@@ -198,7 +198,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		// Si le joueur existe
 		if (player != null) {
 			this.cache.put(uuid, player);
-			this.plugin.getLogger().debug("Unloading the player : " + uuid.toString());
+			this.plugin.getELogger().debug("Unloading the player : " + uuid.toString());
 		}
 	}
 	
@@ -232,9 +232,9 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 					top.put(UUID.fromString(list.getString("identifier")), list.getBigDecimal("balance"));
 				} catch (IllegalArgumentException e) {}
 			}
-			this.plugin.getLogger().debug("Top economy : (currency:'" + currency.getId() + "')");
+			this.plugin.getELogger().debug("Top economy : (currency:'" + currency.getId() + "')");
 		} catch (SQLException e) {
-			this.plugin.getLogger().warn("Error during a change of top : (currency:'" + currency.getId() + "'): " + e.getMessage());
+			this.plugin.getELogger().warn("Error during a change of top : (currency:'" + currency.getId() + "'): " + e.getMessage());
 		} catch (ServerDisableException e) {
 			e.execute();
 		} finally {
