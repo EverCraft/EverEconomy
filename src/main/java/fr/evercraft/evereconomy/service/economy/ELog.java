@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.economy.Currency;
@@ -43,7 +44,7 @@ public class ELog {
 	private final String to;
 	private final String cause;
 	
-	private final Map<String, EReplace<?>> replaces;
+	private final Map<Pattern, EReplace<?>> replaces;
 	
 	public ELog(final EverEconomy plugin, final Timestamp time, final String identifier, final Currency currency,
 			final BigDecimal before, final BigDecimal after, final String transaction, final String to,
@@ -56,14 +57,14 @@ public class ELog {
 		this.transaction = transaction;
 		this.cause = cause;
 		
-		Builder<String, EReplace<?>> builder = ImmutableMap.builder();
-		builder.put("<before>", EReplace.of(() -> this.before.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString()));
-		builder.put("<after>", EReplace.of(() -> this.after.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString()));
-		builder.put("<transaction>", EReplace.of(this.transaction));
-		builder.put("<cause>", EReplace.of(this.cause));
-		builder.put("<time>", EReplace.of(this.time));
-		builder.put("<before_format>", EReplace.of(() -> this.currency.format(this.after)));
-		builder.put("<after_format>", EReplace.of(() -> this.currency.format(this.before)));
+		Builder<Pattern, EReplace<?>> builder = ImmutableMap.builder();
+		builder.put(Pattern.compile("<before>"), EReplace.of(() -> this.before.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString()));
+		builder.put(Pattern.compile("<after>"), EReplace.of(() -> this.after.setScale(this.currency.getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP).toString()));
+		builder.put(Pattern.compile("<transaction>"), EReplace.of(this.transaction));
+		builder.put(Pattern.compile("<cause>"), EReplace.of(this.cause));
+		builder.put(Pattern.compile("<time>"), EReplace.of(this.time));
+		builder.put(Pattern.compile("<before_format>"), EReplace.of(() -> this.currency.format(this.after)));
+		builder.put(Pattern.compile("<after_format>"), EReplace.of(() -> this.currency.format(this.before)));
 		
 		if (to != null) {
 			Optional<User> user = this.plugin.getEServer().getUser(to);
@@ -73,7 +74,7 @@ public class ELog {
 				this.to = to;
 			}
 			
-			builder.put("<player>", EReplace.of(this.to));
+			builder.put(Pattern.compile("<player>"), EReplace.of(this.to));
 		} else {
 			this.to = null;
 		}
@@ -81,7 +82,7 @@ public class ELog {
 		this.replaces = builder.build();
 	}
 	
-	public Map<String, EReplace<?>> getReplaces() {
+	public Map<Pattern, EReplace<?>> getReplaces() {
 		return this.replaces;
 	}
 	

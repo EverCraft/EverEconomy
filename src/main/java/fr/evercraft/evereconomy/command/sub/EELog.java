@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -127,9 +128,9 @@ public class EELog extends ESubCommand<EverEconomy> {
 			lists.add(EEMessages.LOG_EMPTY.getText());
 		}
 		
-		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(this.plugin.getService().getReplaces());
-		replaces.put("<player>", EReplace.of(user.getName()));
+		replaces.put(Pattern.compile("<player>"), EReplace.of(user.getName()));
 		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(
 				EEMessages.LOG_TITLE.getFormat().toText(replaces), 
 				lists, player);

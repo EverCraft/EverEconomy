@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -112,14 +113,14 @@ public class EETake extends ESubCommand<EverEconomy> {
 			ResultType result = account.get().withdraw(this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
 			BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 			
-			HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+			HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 			replaces.putAll(this.plugin.getService().getReplaces());
-			replaces.put("<player>", EReplace.of(user.getName()));
-			replaces.put("<staff>", EReplace.of(staff.getName()));
-			replaces.put("<amount>", EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
-			replaces.put("<amount_format>", EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
-			replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(balance)));
-			replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(balance)));
+			replaces.put(Pattern.compile("<player>"), EReplace.of(user.getName()));
+			replaces.put(Pattern.compile("<staff>"), EReplace.of(staff.getName()));
+			replaces.put(Pattern.compile("<amount>"), EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
+			replaces.put(Pattern.compile("<amount_format>"), EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
+			replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(balance)));
+			replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(balance)));
 			
 			// Le compte existe
 			if (result.equals(ResultType.SUCCESS)) {

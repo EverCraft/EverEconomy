@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -108,11 +109,11 @@ public class EEPay extends ECommand<EverEconomy> {
 				BigDecimal amount = new BigDecimal(Double.parseDouble(amount_name));
 				amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
 				
-				HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+				HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 				replaces.putAll(this.plugin.getService().getReplaces());
-				replaces.put("<player>", EReplace.of(player.getName()));
-				replaces.put("<amount>", EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
-				replaces.put("<amount_format>", EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
+				replaces.put(Pattern.compile("<player>"), EReplace.of(player.getName()));
+				replaces.put(Pattern.compile("<amount>"), EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
+				replaces.put(Pattern.compile("<amount_format>"), EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
 				
 				// La source et le joueur sont différent
 				if (!staff.equals(player)){
@@ -120,15 +121,15 @@ public class EEPay extends ECommand<EverEconomy> {
 					BigDecimal staff_balance = staff_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 					BigDecimal player_balance = player_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 					
-					replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(staff_balance)));
-					replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(staff_balance)));
+					replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(staff_balance)));
+					replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(staff_balance)));
 					
 					// Transfert réussit
 					if (result.equals(ResultType.SUCCESS)) {
 						EEMessages.PAY_STAFF.sender().replace(replaces).sendTo(staff);
 						
-						replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player_balance)));
-						replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player_balance)));
+						replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player_balance)));
+						replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player_balance)));
 						EEMessages.PAY_PLAYER.sender().replace(replaces).sendTo(player);
 					// Transfert erreur
 					} else if (result.equals(ResultType.ACCOUNT_NO_FUNDS)) {

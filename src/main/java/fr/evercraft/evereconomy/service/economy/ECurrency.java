@@ -19,6 +19,7 @@ package fr.evercraft.evereconomy.service.economy;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.text.Text;
@@ -98,15 +99,15 @@ public class ECurrency implements Currency {
 
 	@Override
 	public Text format(final BigDecimal amount, final int numFractionDigits) {
-		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		
-		replaces.put("<amount>", EReplace.of(amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString()));
-		replaces.put("<symbol>", EReplace.of(this.symbol));
+		replaces.put(Pattern.compile("<amount>"), EReplace.of(amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString()));
+		replaces.put(Pattern.compile("<symbol>"), EReplace.of(this.symbol));
 		
 		if (amount.compareTo(BigDecimal.ONE) <= 0) {
-			replaces.put("<currency>", EReplace.of(this.singular));
+			replaces.put(Pattern.compile("<currency>"), EReplace.of(this.singular));
 		} else {
-			replaces.put("<currency>", EReplace.of(this.plural));
+			replaces.put(Pattern.compile("<currency>"), EReplace.of(this.plural));
 		}
 		
 		return EFormatString.of(this.format).toText(replaces);

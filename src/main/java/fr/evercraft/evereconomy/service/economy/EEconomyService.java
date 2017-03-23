@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.service.context.ContextCalculator;
 import org.spongepowered.api.service.economy.Currency;
@@ -246,11 +247,11 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		return top;
 	}
 	
-	public HashMap<String, EReplace<?>> getReplaces() {
-		HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.put("<symbol>", EReplace.of(this.plugin.getService().getDefaultCurrency().getSymbol().toPlain()));
-		replaces.put("<money_singular>", EReplace.of(this.plugin.getService().getDefaultCurrency().getDisplayName().toPlain()));
-		replaces.put("<money_plural>", EReplace.of(this.plugin.getService().getDefaultCurrency().getPluralDisplayName().toPlain()));
+	public HashMap<Pattern, EReplace<?>> getReplaces() {
+		HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
+		replaces.put(Pattern.compile("<symbol>"), EReplace.of(this.plugin.getService().getDefaultCurrency().getSymbol().toPlain()));
+		replaces.put(Pattern.compile("<money_singular>"), EReplace.of(this.plugin.getService().getDefaultCurrency().getDisplayName().toPlain()));
+		replaces.put(Pattern.compile("<money_plural>"), EReplace.of(this.plugin.getService().getDefaultCurrency().getPluralDisplayName().toPlain()));
 		return replaces;
 	}
 }

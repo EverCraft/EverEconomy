@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -93,12 +94,12 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 				Optional<EUser> user = this.plugin.getEServer().getEUser(player.getKey());
 				// Si le User existe bien
 				if (user.isPresent()){
-					HashMap<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+					HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 					replaces.putAll(this.plugin.getService().getReplaces());
-					replaces.put("<player>", EReplace.of(user.get().getName()));
-					replaces.put("<number>", EReplace.of(cpt.toString()));
-					replaces.put("<solde>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player.getValue())));
-					replaces.put("<solde_format>", EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player.getValue())));
+					replaces.put(Pattern.compile("<player>"), EReplace.of(user.get().getName()));
+					replaces.put(Pattern.compile("<number>"), EReplace.of(cpt.toString()));
+					replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player.getValue())));
+					replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player.getValue())));
 					
 					lists.add(EEMessages.BALANCE_TOP_LINE.getFormat().toText(replaces));
 					cpt++;
