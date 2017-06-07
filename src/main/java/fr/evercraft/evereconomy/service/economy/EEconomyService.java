@@ -70,7 +70,7 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 		this.players = new ConcurrentHashMap<UUID, EUniqueAccount>();
 		this.cache = CacheBuilder.newBuilder()
 			    .maximumSize(100)
-			    .expireAfterAccess(5, TimeUnit.MINUTES)
+			    .expireAfterAccess(1, TimeUnit.HOURS)
 			    .build(new CacheLoader<UUID, EUniqueAccount>() {
 			    	/**
 			    	 * Ajoute un joueur au cache
