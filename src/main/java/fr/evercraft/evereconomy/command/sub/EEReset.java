@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
@@ -55,7 +56,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 		return EEMessages.RESET_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
-	public Collection<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
+	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		if (args.size() == 1){
 			return this.getAllUsers(args.get(0));
 		}
@@ -69,15 +70,12 @@ public class EEReset extends ESubCommand<EverEconomy> {
 				.build();
 	}
 	
-	public boolean subExecute(final CommandSource source, final List<String> args) {
-		// Résultat de la commande :
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) {
 		if (args.size() == 1) {
 			Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
 			// Le joueur existe
 			if (user.isPresent()){
-				resultat = commandReset(source, user.get());
+				return this.commandReset(source, user.get());
 			// Le joueur est introuvable
 			} else {
 				EAMessages.PLAYER_NOT_FOUND.sender()
@@ -87,55 +85,52 @@ public class EEReset extends ESubCommand<EverEconomy> {
 		} else {
 			source.sendMessage(this.help(source));
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 
-	private boolean commandReset(final CommandSource staff, final User user) {
-		boolean resultat = false;
-		
+	private CompletableFuture<Boolean> commandReset(final CommandSource staff, final User user) {
 		Optional<UniqueAccount> account = this.plugin.getService().getOrCreateAccount(user.getUniqueId());
-		// Le compte existe
-		if (account.isPresent()) {
-			// Reset
-			if (account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), UtilsCause.command(this.plugin, staff)).getResult().equals(ResultType.SUCCESS)){
-				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
-				resultat = true;
-				
-				HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
-				replaces.putAll(this.plugin.getService().getReplaces());
-				replaces.put(Pattern.compile("<player>"), EReplace.of(user.getName()));
-				replaces.put(Pattern.compile("<staff>"), EReplace.of(staff.getName()));
-				replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(balance)));
-				replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(balance)));
-				
-				// La source et le joueur sont différent
-				if (!user.getIdentifier().equals(staff.getIdentifier())) {
-					EEMessages.RESET_OTHERS_STAFF.sender()
-						.replace(replaces)
-						.sendTo(staff);
-						
-					user.getPlayer().ifPresent(player -> 
-						EEMessages.RESET_OTHERS_PLAYER.sender()
-						.replace(replaces)
-						.sendTo(player));
-				// La source et le joueur sont identique
-				} else {
-					EEMessages.RESET_PLAYER.sender()
-						.replace(replaces)
-						.sendTo(staff);
-				}
-			// Impossible de reset
-			} else {
-				EAMessages.COMMAND_ERROR.sender()
-					.prefix(EEMessages.PREFIX)
-					.sendTo(staff);
-			}
-		// Le compte est introuvable
-		} else {
+		// Le compte n'existe pas
+		if (!account.isPresent()) {
 			EAMessages.ACCOUNT_NOT_FOUND.sender()
 				.prefix(EEMessages.PREFIX)
 				.sendTo(staff);
+			return CompletableFuture.completedFuture(false);
 		}
-		return resultat;
+		
+		// Impossible de reset
+		if (!account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), UtilsCause.command(this.plugin, staff)).getResult().equals(ResultType.SUCCESS)) {
+			EAMessages.COMMAND_ERROR.sender()
+				.prefix(EEMessages.PREFIX)
+				.sendTo(staff);
+			return CompletableFuture.completedFuture(false);
+		}
+		
+		BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
+		HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
+		replaces.putAll(this.plugin.getService().getReplaces());
+		replaces.put(Pattern.compile("<player>"), EReplace.of(user.getName()));
+		replaces.put(Pattern.compile("<staff>"), EReplace.of(staff.getName()));
+		replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(balance)));
+		replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(balance)));
+		
+		// La source et le joueur sont différent
+		if (!user.getIdentifier().equals(staff.getIdentifier())) {
+			EEMessages.RESET_OTHERS_STAFF.sender()
+				.replace(replaces)
+				.sendTo(staff);
+				
+			user.getPlayer().ifPresent(player -> 
+				EEMessages.RESET_OTHERS_PLAYER.sender()
+				.replace(replaces)
+				.sendTo(player));
+		// La source et le joueur sont identique
+		} else {
+			EEMessages.RESET_PLAYER.sender()
+				.replace(replaces)
+				.sendTo(staff);
+		}
+		
+		return CompletableFuture.completedFuture(true);
 	}
 }

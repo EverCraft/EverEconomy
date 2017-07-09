@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
@@ -34,9 +35,9 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.message.replace.EReplace;
+import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.sponge.UtilsCause;
-import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -72,17 +73,14 @@ public class EEPay extends ECommand<EverEconomy> {
 					.build();
 	}
 	
-	public boolean execute(final CommandSource source, final List<String> args) throws CommandException {
-		// Résultat de la commande :
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) throws CommandException {
 		// On connait le joueur et le montant
 		if (args.size() == 2) {
 			if (source instanceof EPlayer) {
 				Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(args.get(0));
 				// Le joueur destination existe
 				if (optPlayer.isPresent()) {
-					resultat = executePay((EPlayer) source, optPlayer.get(), args.get(1));
+					return this.executePay((EPlayer) source, optPlayer.get(), args.get(1));
 				// Le joueur destination est introuvable
 				} else {
 					EAMessages.PLAYER_NOT_FOUND.sender().prefix(EEMessages.PREFIX).sendTo(source);
@@ -94,67 +92,69 @@ public class EEPay extends ECommand<EverEconomy> {
 		} else {
 			source.sendMessage(this.help(source));
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 	
-	public boolean executePay(final EPlayer staff, final EPlayer player, final String amount_name) {
-		// Résultat de la commande :
-		boolean resultat = false;
+	public CompletableFuture<Boolean> executePay(final EPlayer staff, final EPlayer player, final String amount_name) {
 		Optional<UniqueAccount> staff_account = staff.getAccount();
 		Optional<UniqueAccount> player_account = player.getAccount();
+		
 		// Le compte existe
 		if (staff_account.isPresent() && player_account.isPresent()) {
-			// Nombre valide
-			try {
-				BigDecimal amount = new BigDecimal(Double.parseDouble(amount_name));
-				amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
-				
-				HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
-				replaces.putAll(this.plugin.getService().getReplaces());
-				replaces.put(Pattern.compile("<player>"), EReplace.of(player.getName()));
-				replaces.put(Pattern.compile("<amount>"), EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
-				replaces.put(Pattern.compile("<amount_format>"), EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
-				
-				// La source et le joueur sont différent
-				if (!staff.equals(player)){
-					ResultType result = staff_account.get().transfer(player_account.get(), this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
-					BigDecimal staff_balance = staff_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
-					BigDecimal player_balance = player_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
-					
-					replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(staff_balance)));
-					replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(staff_balance)));
-					
-					// Transfert réussit
-					if (result.equals(ResultType.SUCCESS)) {
-						EEMessages.PAY_STAFF.sender().replace(replaces).sendTo(staff);
-						
-						replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player_balance)));
-						replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player_balance)));
-						EEMessages.PAY_PLAYER.sender().replace(replaces).sendTo(player);
-					// Transfert erreur
-					} else if (result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
-						EEMessages.PAY_ERROR_MIN.sender().replace(replaces).sendTo(staff);
-					} else if (result.equals(ResultType.ACCOUNT_NO_SPACE)) {
-						EEMessages.PAY_ERROR_MAX.sender().replace(replaces).sendTo(staff);
-					} else {
-						EAMessages.NUMBER_INVALID.sender().prefix(EEMessages.PREFIX).sendTo(staff);
-					}
-				// La source et le joueur sont identique
-				} else {
-					EEMessages.PAY_ERROR_EQUALS.sender().replace(replaces).sendTo(staff);
-				}
-			// Nombre invalide
-			} catch(NumberFormatException e) {
-				EAMessages.IS_NOT_NUMBER.sender()
-					.prefix(EEMessages.PREFIX)
-					.sendTo(staff);
-			}
-		// Le compte est introuvable
-		} else {
 			EAMessages.ACCOUNT_NOT_FOUND.sender()
 				.prefix(EEMessages.PREFIX)
 				.sendTo(staff);
+			return CompletableFuture.completedFuture(false);
 		}
-		return resultat;
+		
+		// Nombre valide
+		BigDecimal amount = null;
+		try {
+			amount = new BigDecimal(Double.parseDouble(amount_name));
+		// Nombre invalide
+		} catch(NumberFormatException e) {
+			EAMessages.IS_NOT_NUMBER.sender()
+				.prefix(EEMessages.PREFIX)
+				.sendTo(staff);
+			return CompletableFuture.completedFuture(false);
+		}
+			
+		amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
+		
+		HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
+		replaces.putAll(this.plugin.getService().getReplaces());
+		replaces.put(Pattern.compile("<player>"), EReplace.of(player.getName()));
+		replaces.put(Pattern.compile("<amount>"), EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
+		replaces.put(Pattern.compile("<amount_format>"), EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
+		
+		// La source et le joueur sont identique
+		if (staff.equals(player)) {
+			EEMessages.PAY_ERROR_EQUALS.sender().replace(replaces).sendTo(staff);
+			return CompletableFuture.completedFuture(false);
+		}
+		
+		ResultType result = staff_account.get().transfer(player_account.get(), this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
+		BigDecimal staff_balance = staff_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
+		BigDecimal player_balance = player_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
+		
+		replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(staff_balance)));
+		replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(staff_balance)));
+		
+		// Transfert réussit
+		if (result.equals(ResultType.SUCCESS)) {
+			EEMessages.PAY_STAFF.sender().replace(replaces).sendTo(staff);
+			
+			replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player_balance)));
+			replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player_balance)));
+			EEMessages.PAY_PLAYER.sender().replace(replaces).sendTo(player);
+		// Transfert erreur
+		} else if (result.equals(ResultType.ACCOUNT_NO_FUNDS)) {
+			EEMessages.PAY_ERROR_MIN.sender().replace(replaces).sendTo(staff);
+		} else if (result.equals(ResultType.ACCOUNT_NO_SPACE)) {
+			EEMessages.PAY_ERROR_MAX.sender().replace(replaces).sendTo(staff);
+		} else {
+			EAMessages.NUMBER_INVALID.sender().prefix(EEMessages.PREFIX).sendTo(staff);
+		}
+		return CompletableFuture.completedFuture(true);
 	}
 }

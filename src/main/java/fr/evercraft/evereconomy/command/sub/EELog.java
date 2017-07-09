@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
@@ -58,7 +59,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 		return EEMessages.RESET_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
-	public Collection<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
+	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		if (args.size() == 1){
 			return this.getAllUsers(args.get(0));
 		}
@@ -72,17 +73,14 @@ public class EELog extends ESubCommand<EverEconomy> {
 				.build();
 	}
 	
-	public boolean subExecute(final CommandSource source, final List<String> args) {
-		// Résultat de la commande :
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) {
 		if (args.size() == 1) {
 			final Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 			// Le joueur existe
 			if (user.isPresent()){
 				this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.commandLog(source, user.get()))
 					.name("commandLog").submit(this.plugin);
-				resultat = true;
+				return CompletableFuture.completedFuture(true);
 			// Le joueur est introuvable
 			} else {
 				EAMessages.PLAYER_NOT_FOUND.sender()
@@ -97,7 +95,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 				if (user.isPresent()){
 					this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.commandLogPrint(source, user.get(), args.get(1)))
 						.name("commandLogPrint").submit(this.plugin);
-					resultat = true;
+					return CompletableFuture.completedFuture(true);
 				// Le joueur est introuvable
 				} else {
 					EAMessages.PLAYER_NOT_FOUND.sender()
@@ -113,7 +111,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 		} else {
 			source.sendMessage(this.help(source));
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 
 	private void commandLog(final CommandSource player, final User user) {

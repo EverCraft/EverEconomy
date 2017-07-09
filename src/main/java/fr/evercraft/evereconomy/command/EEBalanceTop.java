@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
@@ -32,14 +33,12 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
-import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.everapi.server.user.EUser;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
-import fr.evercraft.evereconomy.service.economy.EEconomyService;
 
 public class EEBalanceTop extends ECommand<EverEconomy> {
 	
@@ -66,57 +65,43 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 				.build();
 	}
 	
-	public boolean execute(final CommandSource staff, final List<String> args) throws CommandException {
-		// Résultat de la commande :
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> execute(final CommandSource staff, final List<String> args) throws CommandException {
 		// Nombre d'argument correct
 		if (args.size() == 0) {
 			this.plugin.getGame().getScheduler().createTaskBuilder().async().execute(() -> this.commandBalanceTop(staff))
 				.name("commandBalanceTop").submit(this.plugin);
-			resultat = true;
+			return CompletableFuture.completedFuture(true);
 		// Nombre d'argument incorrect
 		} else {
-			staff.sendMessage(help(staff));
+			staff.sendMessage(this.help(staff));
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 	
-	public boolean commandBalanceTop(final CommandSource staff) {
-		// Résultat de la commande :
-		boolean resultat = false; 
-		
-		// Si le service d'économie est bien EverEconomy
-		if (this.plugin.getService() instanceof EEconomyService) {
-			List<Text> lists = new ArrayList<Text>();
-			Integer cpt = 1;
-			for (Entry<UUID, BigDecimal> player : this.plugin.getService().topUniqueAccount(30).entrySet()) {
-				Optional<EUser> user = this.plugin.getEServer().getEUser(player.getKey());
-				// Si le User existe bien
-				if (user.isPresent()){
-					HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
-					replaces.putAll(this.plugin.getService().getReplaces());
-					replaces.put(Pattern.compile("<player>"), EReplace.of(user.get().getName()));
-					replaces.put(Pattern.compile("<number>"), EReplace.of(cpt.toString()));
-					replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player.getValue())));
-					replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player.getValue())));
-					
-					lists.add(EEMessages.BALANCE_TOP_LINE.getFormat().toText(replaces));
-					cpt++;
-				}
+	public CompletableFuture<Boolean> commandBalanceTop(final CommandSource staff) {
+		List<Text> lists = new ArrayList<Text>();
+		Integer cpt = 1;
+		for (Entry<UUID, BigDecimal> player : this.plugin.getService().topUniqueAccount(30).entrySet()) {
+			Optional<EUser> user = this.plugin.getEServer().getEUser(player.getKey());
+			// Si le User existe bien
+			if (user.isPresent()){
+				HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
+				replaces.putAll(this.plugin.getService().getReplaces());
+				replaces.put(Pattern.compile("<player>"), EReplace.of(user.get().getName()));
+				replaces.put(Pattern.compile("<number>"), EReplace.of(cpt.toString()));
+				replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player.getValue())));
+				replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player.getValue())));
+				
+				lists.add(EEMessages.BALANCE_TOP_LINE.getFormat().toText(replaces));
+				cpt++;
 			}
-			
-			if (lists.isEmpty()) {
-				lists.add(EEMessages.BALANCE_TOP_EMPTY.getText());
-			}
-			
-			this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(EEMessages.BALANCE_TOP_TITLE.getText(), lists, staff);
-		// Le service d'économie n'est pas EverEconomy
-		} else {
-			EAMessages.COMMAND_ERROR.sender()
-				.prefix(EEMessages.PREFIX)
-				.sendTo(staff);
 		}
-		return resultat;
+		
+		if (lists.isEmpty()) {
+			lists.add(EEMessages.BALANCE_TOP_EMPTY.getText());
+		}
+		
+		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(EEMessages.BALANCE_TOP_TITLE.getText(), lists, staff);
+		return CompletableFuture.completedFuture(true);
 	}
 }

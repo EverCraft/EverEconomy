@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.command.CommandException;
@@ -55,7 +56,7 @@ public class EEGive extends ESubCommand<EverEconomy> {
 		return EEMessages.GIVE_DESCRIPTION.getFormat().toText(this.plugin.getService().getReplaces());
 	}
 	
-	public Collection<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
+	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		if (args.size() == 1){
 			return this.getAllUsers(args.get(0), source);
 		} else if (args.size() == 2){
@@ -72,15 +73,12 @@ public class EEGive extends ESubCommand<EverEconomy> {
 					.build();
 	}
 	
-	public boolean subExecute(final CommandSource source, final List<String> args) {
-		// Résultat de la commande :
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) {
 		if (args.size() == 2) {
 			Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 			// Le joueur existe
 			if (user.isPresent()){
-				resultat = commandGive(source, user.get(), args.get(1));
+				return this.commandGive(source, user.get(), args.get(1));
 			// Le joueur est introuvable
 			} else {
 				EAMessages.PLAYER_NOT_FOUND.sender()
@@ -90,20 +88,18 @@ public class EEGive extends ESubCommand<EverEconomy> {
 		} else {
 			source.sendMessage(this.help(source));
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 
-	private boolean commandGive(final CommandSource staff, final User user, final String amount_string) {
+	private CompletableFuture<Boolean> commandGive(final CommandSource staff, final User user, final String amount_string) {
 		Optional<UniqueAccount> account = this.plugin.getService().getOrCreateAccount(user.getUniqueId());
 		// Le compte est introuvable
 		if (!account.isPresent()) {
 			EAMessages.ACCOUNT_NOT_FOUND.sender()
 				.prefix(EEMessages.PREFIX)
 				.sendTo(staff);
-			return false;
+			return CompletableFuture.completedFuture(false);
 		}
-		
-		boolean resultat = false;
 		
 		// Nombre valide
 		try {
@@ -124,8 +120,6 @@ public class EEGive extends ESubCommand<EverEconomy> {
 			
 			// Transaction réussit
 			if (result.equals(ResultType.SUCCESS)) {
-				resultat = true;
-				
 				// La source et le joueur sont différent
 				if (!user.getIdentifier().equals(staff.getIdentifier())) {
 					EEMessages.GIVE_OTHERS_STAFF.sender()
@@ -142,6 +136,8 @@ public class EEGive extends ESubCommand<EverEconomy> {
 						.replace(replaces)
 						.sendTo(staff);
 				}
+				
+				return CompletableFuture.completedFuture(true);
 			// Max quantité
 			} else if (result.equals(ResultType.ACCOUNT_NO_SPACE)) {
 				// La source et le joueur sont différent
@@ -168,7 +164,7 @@ public class EEGive extends ESubCommand<EverEconomy> {
 				.replace("<number>", amount_string)
 				.sendTo(staff);
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 	
 }

@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -31,8 +32,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.plugin.command.ECommand;
+import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -74,15 +75,12 @@ public class EEBalance extends ECommand<EverEconomy> {
 		return help;
 	}
 	
-	public boolean execute(final CommandSource source, final List<String> args) throws CommandException {
-		// Résultat de la commande :
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) throws CommandException {
 		// Si ne connais pas le joueur
 		if (args.size() == 0) {
 			// Si la source est bien un joueur
 			if (source instanceof EPlayer) {
-				resultat = executeBalance((EPlayer) source);
+				return this.executeBalance((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
 				EAMessages.COMMAND_ERROR_FOR_PLAYER.sendTo(source);
@@ -95,7 +93,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 				// Le joueur existe
 				if (user.isPresent()) {
-					resultat = executeBalanceOthers(source, user.get());
+					return this.executeBalanceOthers(source, user.get());
 				// Le joueur est introuvable
 				} else {
 					EAMessages.PLAYER_NOT_FOUND.sender()
@@ -110,25 +108,22 @@ public class EEBalance extends ECommand<EverEconomy> {
 			}
 		// Nombre d'argument incorrect
 		} else {
-			source.sendMessage(this.getHelp(source).get());
+			source.sendMessage(this.help(source));
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 	
-	public boolean executeBalance(final EPlayer player) {
+	public CompletableFuture<Boolean> executeBalance(final EPlayer player) {
 		BigDecimal balance = player.getBalance();
 		EEMessages.BALANCE_PLAYER.sender()
 			.replace(this.plugin.getService().getReplaces())
 			.replace("<solde>", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
 			.replace("<solde_format>", () -> this.plugin.getService().getDefaultCurrency().format(balance))
 			.sendTo(player);
-		return true;
+		return CompletableFuture.completedFuture(true);
 	}
 	
-	public boolean executeBalanceOthers(final CommandSource staff, final User user) {
-		// Résultat de la commande :
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> executeBalanceOthers(final CommandSource staff, final User user) {
 		// La source et le joueur sont différent
 		if (!user.getIdentifier().equals(staff.getIdentifier()) || !(staff instanceof EPlayer)){
 			Optional<UniqueAccount> account = this.plugin.getService().getOrCreateAccount(user.getUniqueId());
@@ -141,7 +136,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 					.replace("<solde>", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
 					.replace("<solde_format>", () -> this.plugin.getService().getDefaultCurrency().format(balance))
 					.sendTo(staff);
-				resultat = true;
+				return CompletableFuture.completedFuture(true);
 			// Le compte est introuvable
 			} else {
 				EAMessages.ACCOUNT_NOT_FOUND.sender()
@@ -150,8 +145,8 @@ public class EEBalance extends ECommand<EverEconomy> {
 			}
 		// La source et le joueur sont identique
 		} else {
-			this.executeBalance((EPlayer) staff);
+			return this.executeBalance((EPlayer) staff);
 		}
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 }
