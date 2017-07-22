@@ -72,7 +72,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 	
 	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) {
 		if (args.size() == 1) {
-			Optional<User> user = this.plugin.getEServer().getUser(args.get(1));
+			Optional<User> user = this.plugin.getEServer().getUser(args.get(0));
 			// Le joueur existe
 			if (user.isPresent()){
 				return this.commandReset(source, user.get());
@@ -80,6 +80,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 			} else {
 				EAMessages.PLAYER_NOT_FOUND.sender()
 					.prefix(EEMessages.PREFIX)
+					.replace("<player>", args.get(0))
 					.sendTo(source);
 			}
 		} else {

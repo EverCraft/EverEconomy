@@ -83,7 +83,10 @@ public class EEPay extends ECommand<EverEconomy> {
 					return this.executePay((EPlayer) source, optPlayer.get(), args.get(1));
 				// Le joueur destination est introuvable
 				} else {
-					EAMessages.PLAYER_NOT_FOUND.sender().prefix(EEMessages.PREFIX).sendTo(source);
+					EAMessages.PLAYER_NOT_FOUND.sender()
+						.prefix(EEMessages.PREFIX)
+						.replace("<player>", args.get(0))
+						.sendTo(source);
 				}
 			} else {
 				EAMessages.COMMAND_ERROR_FOR_PLAYER.sender().prefix(EEMessages.PREFIX).sendTo(source);
