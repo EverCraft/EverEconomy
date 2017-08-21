@@ -43,7 +43,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 
 	public boolean init() throws ServerDisableException {
 		this.table_account = "account";
-		String account = 	"CREATE TABLE IF NOT EXISTS <table> (" +
+		String account = 	"CREATE TABLE IF NOT EXISTS {table} (" +
 							"`identifier` varchar(36) NOT NULL," +
 							"`currency` varchar(36) NOT NULL," +
 							"`balance` DECIMAL NOT NULL," +
@@ -51,7 +51,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 		initTable(this.getTableAccount(), account);
 		
 		this.table_log = "log";
-		String log = 		"CREATE TABLE IF NOT EXISTS <table> (" +
+		String log = 		"CREATE TABLE IF NOT EXISTS {table} (" +
 							"`id` MEDIUMINT NOT NULL AUTO_INCREMENT," +
 							"`time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP," +
 							"`identifier` varchar(36) NOT NULL," +
