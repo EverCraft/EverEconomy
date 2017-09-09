@@ -23,22 +23,21 @@ import com.google.common.base.Preconditions;
 import fr.evercraft.everapi.plugin.EnumPermission;
 
 public enum EEPermissions implements EnumPermission {
-	HELP("help"),
-	RELOAD("reload"),
+	EVERECONOMY("commands.execute"),
+	HELP("commands.help"),
+	RELOAD("commands.reload"),
+	GIVE("commands.give"),
+	TAKE("commands.take"),
+	RESET("commands.reset"),
+	LOG("commands.log.execute"),
+	LOG_PRINT("commands.log.print"),
 	
-	BALANCE("balance.command"),
-	BALANCE_OTHERS("balance.others"),
-	BALANCE_TOP("balancetop"),
+	BALANCE("commands.balance.execute"),
+	BALANCE_OTHERS("commands.balance.others"),
 	
-	PAY("pay"),
+	BALANCE_TOP("commands.balancetop.execute"),
 	
-	EVERECONOMY("command"),
-	GIVE("give"),
-	TAKE("take"),
-	RESET("reset"),
-	
-	LOG("log.command"),
-	LOG_PRINT("log.print");
+	PAY("commands.pay.execute");
 	
 	private final static String prefix = "evereconomy";
 	
