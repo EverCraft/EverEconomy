@@ -22,6 +22,7 @@ import org.spongepowered.api.service.economy.EconomyService;
 
 import fr.evercraft.everapi.EverAPI;
 import fr.evercraft.everapi.exception.PluginDisableException;
+import fr.evercraft.everapi.exception.ServerDisableException;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.TopEconomyService;
 import fr.evercraft.evereconomy.command.EEBalance;
@@ -98,9 +99,9 @@ public class EverEconomy extends EPlugin<EverEconomy> {
 	}
 	
 	@Override
-	protected void onReload() throws PluginDisableException {
-		// Configurations
-		this.reloadConfigurations();
+	protected void onReload() throws PluginDisableException, ServerDisableException{
+		super.onReload();
+		
 		this.databases.reload();
 
 		// Economy
