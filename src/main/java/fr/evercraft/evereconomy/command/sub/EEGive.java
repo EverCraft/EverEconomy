@@ -83,7 +83,7 @@ public class EEGive extends ESubCommand<EverEconomy> {
 			} else {
 				EAMessages.PLAYER_NOT_FOUND.sender()
 					.prefix(EEMessages.PREFIX)
-					.replace("<player>", args.get(0))
+					.replace("{player}", args.get(0))
 					.sendTo(source);
 			}
 		} else {
@@ -112,12 +112,12 @@ public class EEGive extends ESubCommand<EverEconomy> {
 			
 			HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 			replaces.putAll(this.plugin.getService().getReplaces());
-			replaces.put(Pattern.compile("<player>"), EReplace.of(user.getName()));
-			replaces.put(Pattern.compile("<staff>"), EReplace.of(staff.getName()));
-			replaces.put(Pattern.compile("<amount>"), EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
-			replaces.put(Pattern.compile("<amount_format>"), EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
-			replaces.put(Pattern.compile("<solde>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(balance)));
-			replaces.put(Pattern.compile("<solde_format>"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(balance)));
+			replaces.put(Pattern.compile("{player}"), EReplace.of(user.getName()));
+			replaces.put(Pattern.compile("{staff}"), EReplace.of(staff.getName()));
+			replaces.put(Pattern.compile("{amount}"), EReplace.of(this.plugin.getService().getDefaultCurrency().cast(amount)));
+			replaces.put(Pattern.compile("{amount_format}"), EReplace.of(this.plugin.getService().getDefaultCurrency().format(amount)));
+			replaces.put(Pattern.compile("{solde}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().cast(balance)));
+			replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().format(balance)));
 			
 			// Transaction réussit
 			if (result.equals(ResultType.SUCCESS)) {
@@ -162,7 +162,7 @@ public class EEGive extends ESubCommand<EverEconomy> {
 		} catch(NumberFormatException e) {
 			EAMessages.NUMBER_INVALID.sender()
 				.prefix(EEMessages.PREFIX)
-				.replace("<number>", amount_string)
+				.replace("{number}", amount_string)
 				.sendTo(staff);
 		}
 		return CompletableFuture.completedFuture(false);

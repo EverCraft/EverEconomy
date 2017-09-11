@@ -85,7 +85,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 			} else {
 				EAMessages.PLAYER_NOT_FOUND.sender()
 					.prefix(EEMessages.PREFIX)
-					.replace("<player>", args.get(0))
+					.replace("{player}", args.get(0))
 					.sendTo(source);
 			}
 		} else if (args.size() == 2) {
@@ -101,7 +101,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 				} else {
 					EAMessages.PLAYER_NOT_FOUND.sender()
 						.prefix(EEMessages.PREFIX)
-						.replace("<player>", args.get(0))
+						.replace("{player}", args.get(0))
 						.sendTo(source);
 				}
 			// Il n'a pas la permission
@@ -130,7 +130,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 		
 		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(this.plugin.getService().getReplaces());
-		replaces.put(Pattern.compile("<player>"), EReplace.of(user.getName()));
+		replaces.put(Pattern.compile("{player}"), EReplace.of(user.getName()));
 		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(
 				EEMessages.LOG_TITLE.getFormat().toText(replaces), 
 				lists, player);
@@ -166,14 +166,14 @@ public class EELog extends ESubCommand<EverEconomy> {
 				if (player.getIdentifier().equals(user.getIdentifier())) {
 					EEMessages.LOG_PRINT.sender()
 						.replace(this.plugin.getService().getReplaces())
-						.replace("<player>", user.getName())
-						.replace("<file>", file.getName())
+						.replace("{player}", user.getName())
+						.replace("{file}", file.getName())
 						.sendTo(player);
 				} else {
 					EEMessages.LOG_PRINT_EQUALS.sender()
 						.replace(this.plugin.getService().getReplaces())
-						.replace("<player>", user.getName())
-						.replace("<file>", file.getName())
+						.replace("{player}", user.getName())
+						.replace("{file}", file.getName())
 						.sendTo(player);
 				}
 			} catch (IOException e) {

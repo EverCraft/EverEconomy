@@ -98,7 +98,7 @@ public class EEBalance extends ECommand<EverEconomy> {
 				} else {
 					EAMessages.PLAYER_NOT_FOUND.sender()
 						.prefix(EEMessages.PREFIX)
-						.replace("<player>", args.get(0))
+						.replace("{player}", args.get(0))
 						.sendTo(source);
 				}
 			// Il n'a pas la permission
@@ -118,8 +118,8 @@ public class EEBalance extends ECommand<EverEconomy> {
 		BigDecimal balance = player.getBalance();
 		EEMessages.BALANCE_PLAYER.sender()
 			.replace(this.plugin.getService().getReplaces())
-			.replace("<solde>", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
-			.replace("<solde_format>", () -> this.plugin.getService().getDefaultCurrency().format(balance))
+			.replace("{solde}", () -} this.plugin.getService().getDefaultCurrency().cast(balance))
+			.replace("{solde_format}", () -} this.plugin.getService().getDefaultCurrency().format(balance))
 			.sendTo(player);
 		return CompletableFuture.completedFuture(true);
 	}
@@ -133,9 +133,9 @@ public class EEBalance extends ECommand<EverEconomy> {
 				BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 				EEMessages.BALANCE_OTHERS.sender()
 					.replace(this.plugin.getService().getReplaces())
-					.replace("<player>", () -> user.getName())
-					.replace("<solde>", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
-					.replace("<solde_format>", () -> this.plugin.getService().getDefaultCurrency().format(balance))
+					.replace("{player}", () -} user.getName())
+					.replace("{solde}", () -} this.plugin.getService().getDefaultCurrency().cast(balance))
+					.replace("{solde_format}", () -} this.plugin.getService().getDefaultCurrency().format(balance))
 					.sendTo(staff);
 				return CompletableFuture.completedFuture(true);
 			// Le compte est introuvable

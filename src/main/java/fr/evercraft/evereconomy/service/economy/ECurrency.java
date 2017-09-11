@@ -101,13 +101,13 @@ public class ECurrency implements Currency {
 	public Text format(final BigDecimal amount, final int numFractionDigits) {
 		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		
-		replaces.put(Pattern.compile("<amount>"), EReplace.of(amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString()));
-		replaces.put(Pattern.compile("<symbol>"), EReplace.of(this.symbol));
+		replaces.put(Pattern.compile("{amount}"), EReplace.of(amount.setScale(numFractionDigits, BigDecimal.ROUND_HALF_UP).toString()));
+		replaces.put(Pattern.compile("{symbol}"), EReplace.of(this.symbol));
 		
 		if (amount.compareTo(BigDecimal.ONE) <= 0) {
-			replaces.put(Pattern.compile("<currency>"), EReplace.of(this.singular));
+			replaces.put(Pattern.compile("{currency}"), EReplace.of(this.singular));
 		} else {
-			replaces.put(Pattern.compile("<currency>"), EReplace.of(this.plural));
+			replaces.put(Pattern.compile("{currency}"), EReplace.of(this.plural));
 		}
 		
 		return EFormatString.of(this.format).toText(replaces);

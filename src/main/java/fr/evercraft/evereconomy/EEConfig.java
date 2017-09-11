@@ -50,7 +50,7 @@ public class EEConfig extends EConfig<EverEconomy> {
 		addDefault("currency.singular", "&aEmeraude");
 		addDefault("currency.plural", "&aEmeraudes");
 		addDefault("currency.symbol", "&aE");
-		addDefault("currency.format", "&6<amount> <currency>", "Usage : <amount>, <currency>, <symbol>");
+		addDefault("currency.format", "&6{amount} {currency}", "Usage : {amount}, {currency}, {symbol}");
 		addDefault("currency.starting-balance", 300);
 		addDefault("currency.min-balance", 0);
 		addDefault("currency.max-balance", 1000000);
@@ -96,6 +96,6 @@ public class EEConfig extends EConfig<EverEconomy> {
 	}
 
 	public String getCurrencyFormat() {
-		return this.get("currency.format").getString("<amount> <currency>");
+		return this.get("currency.format").getString("{amount} {currency}");
 	}
 }
