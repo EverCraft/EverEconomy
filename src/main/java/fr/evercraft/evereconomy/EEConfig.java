@@ -51,10 +51,10 @@ public class EEConfig extends EConfig<EverEconomy> {
 		addDefault("currency.plural", "&aEmeraudes");
 		addDefault("currency.symbol", "&aE");
 		addDefault("currency.format", "&6<amount> <currency>", "Usage : <amount>, <currency>, <symbol>");
-		addDefault("currency.balanceStarting", 300);
-		addDefault("currency.balanceMin", 0);
-		addDefault("currency.balanceMax", 1000000);
-		addDefault("currency.numFractionDigits", 2);
+		addDefault("currency.starting-balance", 300);
+		addDefault("currency.min-balance", 0);
+		addDefault("currency.max-balance", 1000000);
+		addDefault("currency.num-fraction-digits", 2);
 		
 		addDefault("bypass", Arrays.asList("86f8f95b-e5e6-45c4-bf85-4d64dbd0903f"));
 	}
@@ -80,19 +80,19 @@ public class EEConfig extends EConfig<EverEconomy> {
 	}
 	
 	public double getCurrencyBalanceDefault(){
-		return this.get("currency.balanceStarting").getDouble(0);
+		return this.get("currency.starting-balance").getDouble(0);
 	}
 	
 	public int getCurrencyNumFractionDigits(){
-		return this.get("currency.numFractionDigits").getInt(2);
+		return this.get("currency.num-fraction-digits").getInt(2);
 	}
 	
 	public double getCurrencyBalanceMin(){
-		return this.get("currency.minBalance").getDouble(0);
+		return this.get("currency.min-balance").getDouble(0);
 	}
 	
 	public double getCurrencyBalanceMax(){
-		return this.get("currency.maxBalance").getDouble(Double.MAX_VALUE);
+		return this.get("currency.max-balance").getDouble(Double.MAX_VALUE);
 	}
 
 	public String getCurrencyFormat() {
