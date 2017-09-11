@@ -17,6 +17,7 @@
 package fr.evercraft.evereconomy;
 
 import java.util.Arrays;
+import java.util.List;
 
 import fr.evercraft.everapi.plugin.file.EConfig;
 
@@ -29,6 +30,14 @@ public class EEConfig extends EConfig<EverEconomy> {
 	public void reload() {
 		super.reload();
 		this.plugin.getELogger().setDebug(this.isDebug());
+	}
+	
+	@Override
+	public List<String> getHeader() {
+		return 	Arrays.asList(	"####################################################### #",
+								"                  EverEconomy (By rexbut)                #",
+								"    For more information : https://docs.evercraft.fr     #",
+								"####################################################### #");
 	}
 
 	public void loadDefault() {
