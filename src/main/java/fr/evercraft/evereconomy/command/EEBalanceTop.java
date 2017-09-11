@@ -89,8 +89,8 @@ public class EEBalanceTop extends ECommand<EverEconomy> {
 				replaces.putAll(this.plugin.getService().getReplaces());
 				replaces.put(Pattern.compile("{player}"), EReplace.of(user.get().getName()));
 				replaces.put(Pattern.compile("{number}"), EReplace.of(cpt.toString()));
-				replaces.put(Pattern.compile("{solde}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().cast(player.getValue())));
-				replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().format(player.getValue())));
+				replaces.put(Pattern.compile("{solde}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player.getValue())));
+				replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player.getValue())));
 				
 				lists.add(EEMessages.BALANCE_TOP_LINE.getFormat().toText(replaces));
 				cpt++;

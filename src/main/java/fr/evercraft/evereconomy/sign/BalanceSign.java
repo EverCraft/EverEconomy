@@ -56,8 +56,8 @@ public class BalanceSign implements SignSubject {
 		BigDecimal balance = player.getBalance();
 		EEMessages.BALANCE_PLAYER.sender()
 			.replace(this.plugin.getService().getReplaces())
-			.replace("{solde}", () -} this.plugin.getService().getDefaultCurrency().cast(balance))
-			.replace("{solde_format}", () -} this.plugin.getService().getDefaultCurrency().format(balance))
+			.replace("{solde}", () -> this.plugin.getService().getDefaultCurrency().cast(balance))
+			.replace("{solde_format}", () -> this.plugin.getService().getDefaultCurrency().format(balance))
 			.sendTo(player);
 		return true;
 	}

@@ -140,15 +140,15 @@ public class EEPay extends ECommand<EverEconomy> {
 		BigDecimal staff_balance = staff_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 		BigDecimal player_balance = player_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 		
-		replaces.put(Pattern.compile("{solde}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().cast(staff_balance)));
-		replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().format(staff_balance)));
+		replaces.put(Pattern.compile("{solde}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(staff_balance)));
+		replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(staff_balance)));
 		
 		// Transfert réussit
 		if (result.equals(ResultType.SUCCESS)) {
 			EEMessages.PAY_STAFF.sender().replace(replaces).sendTo(staff);
 			
-			replaces.put(Pattern.compile("{solde}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().cast(player_balance)));
-			replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().format(player_balance)));
+			replaces.put(Pattern.compile("{solde}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(player_balance)));
+			replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(player_balance)));
 			EEMessages.PAY_PLAYER.sender().replace(replaces).sendTo(player);
 		// Transfert erreur
 		} else if (result.equals(ResultType.ACCOUNT_NO_FUNDS)) {

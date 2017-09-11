@@ -112,8 +112,8 @@ public class EEReset extends ESubCommand<EverEconomy> {
 		replaces.putAll(this.plugin.getService().getReplaces());
 		replaces.put(Pattern.compile("{player}"), EReplace.of(user.getName()));
 		replaces.put(Pattern.compile("{staff}"), EReplace.of(staff.getName()));
-		replaces.put(Pattern.compile("{solde}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().cast(balance)));
-		replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -} this.plugin.getService().getDefaultCurrency().format(balance)));
+		replaces.put(Pattern.compile("{solde}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().cast(balance)));
+		replaces.put(Pattern.compile("{solde_format}"), EReplace.of(() -> this.plugin.getService().getDefaultCurrency().format(balance)));
 		
 		// La source et le joueur sont différent
 		if (!user.getIdentifier().equals(staff.getIdentifier())) {
