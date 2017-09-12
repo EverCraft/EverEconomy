@@ -130,7 +130,7 @@ public class EELog extends ESubCommand<EverEconomy> {
 		
 		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(this.plugin.getService().getReplaces());
-		replaces.put(Pattern.compile("{player}"), EReplace.of(user.getName()));
+		replaces.put(Pattern.compile("\\{player}"), EReplace.of(user.getName()));
 		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(
 				EEMessages.LOG_TITLE.getFormat().toText(replaces), 
 				lists, player);

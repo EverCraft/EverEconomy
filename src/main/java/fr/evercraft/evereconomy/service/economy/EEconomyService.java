@@ -249,9 +249,9 @@ public class EEconomyService implements TopEconomyService, EconomyService {
 	
 	public HashMap<Pattern, EReplace<?>> getReplaces() {
 		HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
-		replaces.put(Pattern.compile("{symbol}"), EReplace.of(this.plugin.getService().getDefaultCurrency().getSymbol().toPlain()));
-		replaces.put(Pattern.compile("{money_singular}"), EReplace.of(this.plugin.getService().getDefaultCurrency().getDisplayName().toPlain()));
-		replaces.put(Pattern.compile("{money_plural}"), EReplace.of(this.plugin.getService().getDefaultCurrency().getPluralDisplayName().toPlain()));
+		replaces.put(Pattern.compile("\\{symbol}"), EReplace.of(this.plugin.getService().getDefaultCurrency().getSymbol().toPlain()));
+		replaces.put(Pattern.compile("\\{money_singular}"), EReplace.of(this.plugin.getService().getDefaultCurrency().getDisplayName().toPlain()));
+		replaces.put(Pattern.compile("\\{money_plural}"), EReplace.of(this.plugin.getService().getDefaultCurrency().getPluralDisplayName().toPlain()));
 		return replaces;
 	}
 }
