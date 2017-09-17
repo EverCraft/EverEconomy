@@ -116,7 +116,20 @@ public class EEMessage extends EMessage<EverEconomy> {
 		
 		SIGN_BALANCE_CREATE("signBalanceCreate",			"&7Le panneau a été créé avec succès."),
 		SIGN_BALANCE_DISABLE("signBalanceDisable",   		 "&cCe panneau est désactivé."),
-		SIGN_BALANCE_BREAK("signBalanceBreak",				"&7Le panneau a été supprimé.");
+		SIGN_BALANCE_BREAK("signBalanceBreak",				"&7Le panneau a été supprimé."),
+		
+		PERMISSIONS_COMMANDS_EXECUTE("permissionsCommandsExecute",						""),
+		PERMISSIONS_COMMANDS_HELP("permissionsCommandsHelp",							""),
+		PERMISSIONS_COMMANDS_RELOAD("permissionsCommandsReload",						""),
+		PERMISSIONS_COMMANDS_GIVE("permissionsCommandsGive",							""),
+		PERMISSIONS_COMMANDS_TAKE("permissionsCommandsTake",							""),
+		PERMISSIONS_COMMANDS_RESET("permissionsCommandsReset",							""),
+		PERMISSIONS_COMMANDS_LOG_EXECUTE("permissionsCommandsLogExecute",				""),
+		PERMISSIONS_COMMANDS_LOG_PRINT("permissionsCommandsLogPrint",					""),
+		PERMISSIONS_COMMANDS_BALANCE_EXECUTE("permissionsCommandsBalanceExecute",		""),
+		PERMISSIONS_COMMANDS_BALANCE_OTHERS("permissionsCommandsBalanceOthers",			""),
+		PERMISSIONS_COMMANDS_BALANCETOP_EXECUTE("permissionsCommandsBalancetopExecute",	""),
+		PERMISSIONS_COMMANDS_PAY_EXECUTE("permissionsCommandsPayExecute",				"");
 		
 		private final String path;
 	    private final EMessageBuilder french;
