@@ -188,4 +188,9 @@ public class EEMessage extends EMessage<EverEconomy> {
 			this.builder = message;
 		}
 	}
+	
+	@Override
+	public EnumMessage getPrefix() {
+		return EEMessages.PREFIX;
+	}
 }
