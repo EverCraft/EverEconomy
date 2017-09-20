@@ -120,8 +120,12 @@ public class EverEconomy extends EPlugin<EverEconomy> {
 		return this.configs;
 	}
 	
-	public EEMessage getMessages(){
+	public EEMessage getMessages() {
 		return this.messages;
+	}
+	
+	public EEPermissions[] getPermissions() {
+		return EEPermissions.values();
 	}
 	
 	public EEDataBase getDataBases(){
