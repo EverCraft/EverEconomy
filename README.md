@@ -14,7 +14,7 @@ EverEconomy est un plugin de gestion de l’économie sur votre serveur.
 * Gestion du symbole de la monnaie
 * Gestion de la monnaie des joueurs hors-ligne
 * Gestion de la somme par défaut de la monnaie
-* [Pour plus d'informations](https://docs.evercraft.fr/everchat/index.html)
+* [Pour plus d'informations](https://docs.evercraft.fr/evereconomy/index.html)
 
 ## Liens ##
 * [Download](https://github.com/EverCraft/EverEconomy/releases)
