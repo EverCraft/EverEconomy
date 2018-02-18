@@ -36,7 +36,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.message.replace.EReplace;
-import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.everapi.plugin.command.ESubCommand;
 import fr.evercraft.evereconomy.EECommand;
 import fr.evercraft.evereconomy.EEPermissions;
@@ -100,7 +99,7 @@ public class EEReset extends ESubCommand<EverEconomy> {
 		}
 		
 		// Impossible de reset
-		if (!account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), UtilsCause.command(this.plugin, staff)).getResult().equals(ResultType.SUCCESS)) {
+		if (!account.get().resetBalance(this.plugin.getService().getDefaultCurrency(), this.plugin.getCurrentCause()).getResult().equals(ResultType.SUCCESS)) {
 			EAMessages.COMMAND_ERROR.sender()
 				.prefix(EEMessages.PREFIX)
 				.sendTo(staff);

@@ -36,7 +36,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.message.replace.EReplace;
-import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.everapi.plugin.command.ESubCommand;
 import fr.evercraft.evereconomy.EECommand;
 import fr.evercraft.evereconomy.EEPermissions;
@@ -107,7 +106,7 @@ public class EEGive extends ESubCommand<EverEconomy> {
 			BigDecimal amount = new BigDecimal(Double.parseDouble(amount_string));
 			amount = amount.setScale(this.plugin.getService().getDefaultCurrency().getDefaultFractionDigits(), BigDecimal.ROUND_HALF_UP);
 			
-			ResultType result = account.get().deposit(this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
+			ResultType result = account.get().deposit(this.plugin.getService().getDefaultCurrency(), amount, this.plugin.getCurrentCause()).getResult();
 			BigDecimal balance = account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 			
 			HashMap<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();

@@ -31,6 +31,7 @@ import org.spongepowered.api.service.economy.transaction.TransactionType;
 import fr.evercraft.everapi.exception.PluginDisableException;
 import fr.evercraft.everapi.exception.ServerDisableException;
 import fr.evercraft.everapi.plugin.EDataBase;
+import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.evereconomy.service.economy.ELog;
 
 public class EEDataBase extends EDataBase<EverEconomy> {
@@ -76,6 +77,8 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 	}
 	
 	public void log(final String identifier, final Currency currency, final BigDecimal before, final BigDecimal after, final TransactionType transaction, final Cause cause, final String to) {
+		String causeString = UtilsCause.getContextKeys(cause);
+		
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
@@ -90,7 +93,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 			preparedStatement.setBigDecimal(4, after);
 			preparedStatement.setString(5, transaction.getName());
 			preparedStatement.setString(6, to);
-			preparedStatement.setString(7, String.join(", ", cause.getNamedCauses().keySet()));
+			preparedStatement.setString(7, causeString);
 			
 			preparedStatement.execute();
 			this.plugin.getELogger().debug("Log : (identifier='" + identifier + "';"
@@ -99,7 +102,7 @@ public class EEDataBase extends EDataBase<EverEconomy> {
 													+ "after='" + after + "';"
 													+ "transaction='" + transaction.getName() + "';"
 													+ "to='" + to + "';"
-													+ "cause='" + String.join(", ", cause.getNamedCauses().keySet()) + "')");
+													+ "cause='" + causeString + "')");
 		} catch (SQLException e) {
 	    	this.plugin.getELogger().warn("Error during a change of log : " + e.getMessage());
 		} catch (ServerDisableException e) {

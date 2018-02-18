@@ -19,7 +19,6 @@ package fr.evercraft.evereconomy.service.economy.transaction;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.economy.EconomyTransactionEvent;
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.economy.Currency;
@@ -51,7 +50,7 @@ public class ETransactionResult implements TransactionResult {
 		this.transaction = transaction;
 		
 		plugin.getELogger().debug("Event EconomyTransactionEvent : (Account='" + this.account.getIdentifier() +"')");
-		EconomyTransactionEvent event = new EEconomyTransactionEvent(Cause.source(plugin).build(), this);
+		EconomyTransactionEvent event = new EEconomyTransactionEvent(plugin.getGame().getCauseStackManager().getCurrentCause(), this);
 		plugin.getGame().getEventManager().post(event);
 	}
 

@@ -37,7 +37,6 @@ import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.sponge.UtilsCause;
 import fr.evercraft.evereconomy.EEMessage.EEMessages;
 import fr.evercraft.evereconomy.EEPermissions;
 import fr.evercraft.evereconomy.EverEconomy;
@@ -136,7 +135,7 @@ public class EEPay extends ECommand<EverEconomy> {
 			return CompletableFuture.completedFuture(false);
 		}
 		
-		ResultType result = staff_account.get().transfer(player_account.get(), this.plugin.getService().getDefaultCurrency(), amount, UtilsCause.command(this.plugin, staff)).getResult();
+		ResultType result = staff_account.get().transfer(player_account.get(), this.plugin.getService().getDefaultCurrency(), amount, this.plugin.getCurrentCause()).getResult();
 		BigDecimal staff_balance = staff_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 		BigDecimal player_balance = player_account.get().getBalance(this.plugin.getService().getDefaultCurrency());
 		
